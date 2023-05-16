@@ -1,14 +1,19 @@
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const firebase = require('firebase')
-const app = express()
-const port = 8000
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const usersRoutes = require('./routes/users');
+
+const app = express();
+const PORT = 8000;
+
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+
+app.use('/users', usersRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+    res.send('<h1>Server Running...</h1>');
+});
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+app.listen(PORT, () => console.log(`Server running on port ${PORT}.`));
