@@ -1,56 +1,38 @@
-const { v4: uuidv4 } = require('uuid');
-let users = [];
-const getUsers = (req, res) => {
-    res.send(users);
+const MODELS = require('../models/userModels');
+
+const getUsers = async (req, res) => {
+    let getUser = await MODELS.getAllUsers();
+    res.status(200).send(getUser);
 }
 
-const addUser = (req, res) => {
-    const user = req.body;
-
-    const userId = uuidv4();;
-
-    const userWithId = { id: userId, ...user }
-    users.push(userWithId);
-
-    res.send('successfuly add user');
+const addUser = async (req, res) => {
+    let user = req.body;
+    let data = await MODELS.addUser(user);
+    res.status(201).send(data);
 }
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
+    const { id } = req.params;
+    const userData = await MODELS.getUserById(id);
+    res.status(200).send(userData);
+}
+
+const deleteUser = async (req, res) => {
     const { id } = req.params;
 
-    const findUser = users.find((user) => user.id === id);
+    const userData = await MODELS.deleteUser(id);
 
-    res.send(findUser);
+    res.status(200).send(userData);
 }
 
-const deleteUser = (req, res) => {
+const updateUser = async (req, res) => {
+
     const { id } = req.params;
+    const { full_name, email, age, gender, address, disability } = req.body;
 
-    users = users.filter((user) => user.id !== id);
+    const userData = await MODELS.updateUser(id, full_name, email, age, gender, address, disability);
 
-    res.send(`user has been deleted`);
-}
-
-const updateUser = (req, res) => {
-    const { id } = req.params;
-
-    const { firstName, lastName, age } = req.body;
-
-    const user = users.find((user) => user.id === id);
-
-    if(firstName){
-        user.firstName = firstName;
-    }
-
-    if(lastName){
-        user.lastName = lastName;
-    }
-
-    if(age){
-        user.age = age;
-    }
-
-    res.send(`user has been updated`);
+    res.status(200).send(userData);
 }
 
 module.exports = { getUsers, getUserById, addUser, deleteUser, updateUser }

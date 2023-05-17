@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/users', usersRoutes);
+app.use('/api/users', usersRoutes);
 
 app.get('/', (req, res) => {
     res.send('<h1>Server Running...</h1>');
