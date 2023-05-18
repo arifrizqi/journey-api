@@ -1,13 +1,4 @@
-const { Firestore } = require('@google-cloud/firestore');
-const CREDENTIALS = require('../key.json');
-
-const firestore = new Firestore({
-    projectId: CREDENTIALS.project_id,
-    credentials: {
-        client_email: CREDENTIALS.client_email,
-        private_key: CREDENTIALS.private_key
-    }
-});
+const firestore = require('../config/firebase-config')
 
 const users = firestore.collection('users');
 
@@ -121,4 +112,10 @@ const updateUser = async (id, full_name, email, age, gender, address, disability
 }
 
 
-module.exports = { addUser, getAllUsers, getUserById, deleteUser, updateUser };
+module.exports = {
+    addUser,
+    getAllUsers,
+    getUserById,
+    deleteUser,
+    updateUser
+};

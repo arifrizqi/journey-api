@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const usersRoutes = require('./routes/users');
+const usersRoutes = require('./routes/users-route');
+const companysRoutes = require('./routes/companys-route');
 
 const app = express();
 const PORT = 8000;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/users', usersRoutes);
+app.use('/api/companys', companysRoutes);
 
 app.get('/', (req, res) => {
     res.send('<h1>Server Running...</h1>');
