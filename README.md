@@ -2,7 +2,7 @@
 Journey RestAPI
 # How To Use
 * ### Users ###
-  URL Route: `http://127.0.0.1:8000/users/`
+  URL Route: `http://127.0.0.1:8000/api/users`
   * **[GET]** Get Specific Users
   
     Additional Route: `<string:id>`
@@ -69,7 +69,8 @@ Journey RestAPI
       "profile_photo_url": "string",
       "gender": "string",
       "age": "int",
-      "phone_number": "int"
+      "phone_number": "int",
+      "password": "string"
     }
     ```
   * **[DELETE]** Delete Specific User
@@ -90,8 +91,8 @@ Journey RestAPI
     }
     ```
 ---
-* ### Companyies ###
-  URL Route: `http://127.0.0.1:8000/companies/`
+* ### Companies ###
+  URL Route: `http://127.0.0.1:8000/api/companies`
   * **[GET]** Get Specific Company
   
     Additional Route: `<string:id>`
