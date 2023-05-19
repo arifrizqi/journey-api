@@ -1,10 +1,17 @@
+const bcrypt = require('bcrypt');
 const firestore = require('../config/firebase-config')
 
-const companys = firestore.collection('companys');
+const companies = firestore.collection('companies');
 
 const addCompany = async (company) => {
     try {
-        let data = await companys.add(company);
+        const { password } = company;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const companyWithHashedPassword = {
+            ...company,
+            password: hashedPassword
+        }
+        let data = await companies.add(companyWithHashedPassword);
         return {
             status: 'Success',
             id: data.id
@@ -16,24 +23,24 @@ const addCompany = async (company) => {
     }
 }
 
-const getAllCompanys = async () => {
+const getAllCompanies = async () => {
     try {
-        let getAllcompanys = await companys.get();
-        if (getAllcompanys.empty) {
+        let getAllCompanies = await companies.get();
+        if (getAllCompanies.empty) {
             return {
                 status: 'Data is empty!',
-                companys: []
+                companies: []
             }
         } else {
-            let companys = [];
-            getAllcompanys.forEach((getAllCompany) => {
+            let companies = [];
+            getAllCompanies.forEach((getAllCompany) => {
                 let tempData = getAllCompany.data();
                 tempData['id'] = getAllCompany.id;
-                companys.push(tempData);
+                companies.push(tempData);
             });
             return {
                 status: 'Success',
-                companys: companys
+                companies: companies
             };
         }
         
@@ -46,7 +53,7 @@ const getAllCompanys = async () => {
 
 const getCompanyById = async (id) => {
     try {
-        const userRef = companys.doc(id);
+        const userRef = companies.doc(id);
         const userDoc = await userRef.get();
 
         if (userDoc.exists) {
@@ -71,7 +78,7 @@ const getCompanyById = async (id) => {
 
 const deleteCompany = async (id) => {
     try {
-        await companys.doc(id).delete();
+        await companies.doc(id).delete();
         return {
             status: 'success'
         }
@@ -85,14 +92,18 @@ const deleteCompany = async (id) => {
 
 const updateCompany = async (id, name, address, city, province, logo, desc, empolyees, sector, email, password) => {
     try {
-        const userRef = companys.doc(id);
+        const userRef = companies.doc(id);
         const userDoc = await userRef.get();
     
         if (!userDoc.exists) {
           res.status(404).send('User not found!');
           return;
         }
-    
+        let hashedPassword = userDoc.data().password;
+        if (password) {
+            hashedPassword = await bcrypt.hash(password, 10);
+        }
+
         await userRef.update({
             name: name || userDoc.data().name,
             address: address || userDoc.data().address,
@@ -103,7 +114,7 @@ const updateCompany = async (id, name, address, city, province, logo, desc, empo
             empolyees: empolyees || userDoc.data().empolyees,
             sector: sector || userDoc.data().sector,
             email: email || userDoc.data().email,
-            password: password || userDoc.data().password,
+            password: hashedPassword
         });
     
         return {
@@ -119,7 +130,7 @@ const updateCompany = async (id, name, address, city, province, logo, desc, empo
 
 module.exports = {
     addCompany,
-    getAllCompanys,
+    getAllCompanies,
     getCompanyById,
     deleteCompany,
     updateCompany

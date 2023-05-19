@@ -25,8 +25,8 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { full_name, email, age, gender, address, disability } = req.body;
-    const userData = await HELPERS.updateUser(id, full_name, email, age, gender, address, disability);
+    const { full_name, email, age, gender, address, disability, password } = req.body;
+    const userData = await HELPERS.updateUser(id, full_name, email, age, gender, address, disability, password);
     res.send(userData);
 }
 
@@ -35,4 +35,5 @@ module.exports = {
     getUserById,
     addUser,
     deleteUser,
-    updateUser }
+    updateUser
+};

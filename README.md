@@ -90,8 +90,8 @@ Journey RestAPI
     }
     ```
 ---
-* ### Companys ###
-  URL Route: `http://127.0.0.1:8000/company/`
+* ### Companyies ###
+  URL Route: `http://127.0.0.1:8000/companies/`
   * **[GET]** Get Specific Company
   
     Additional Route: `<string:id>`

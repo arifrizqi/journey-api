@@ -1,10 +1,21 @@
+const admin = require('firebase-admin');
+const timestamp = admin.firestore.Timestamp.fromDate(new Date());
+const bcrypt = require('bcrypt');
 const firestore = require('../config/firebase-config')
 
 const users = firestore.collection('users');
 
 const addUser = async (user) => {
     try {
-        let data = await users.add(user);
+        const { password } = user;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const userWithTimestamp = {
+            ...user,
+            created_at: timestamp,
+            password: hashedPassword
+        }
+
+        let data = await users.add(userWithTimestamp);
         return {
             status: 'Success',
             id: data.id
@@ -82,7 +93,7 @@ const deleteUser = async (id) => {
     }
 }
 
-const updateUser = async (id, full_name, email, age, gender, address, disability) => {
+const updateUser = async (id, full_name, email, age, gender, address, disability, password) => {
     try {
         const userRef = users.doc(id);
         const userDoc = await userRef.get();
@@ -91,14 +102,17 @@ const updateUser = async (id, full_name, email, age, gender, address, disability
           res.status(404).send('User not found!');
           return;
         }
-    
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         await userRef.update({
             full_name: full_name || userDoc.data().full_name,
             email: email || userDoc.data().email,
             age: age || userDoc.data().age,
             gender: gender || userDoc.data().gender,
             address: address || userDoc.data().address,
-            disability: disability || userDoc.data().disability
+            disability: disability || userDoc.data().disability,
+            password: hashedPassword || userDoc.data().password
         });
     
         return {

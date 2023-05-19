@@ -1,15 +1,15 @@
 const express = require('express');
 const { 
     addCompany,
-    getAllCompanys,
+    getAllCompanies,
     getCompanyById,
     deleteCompany,
     updateCompany
-} = require('../controllers/companys-controller');
+} = require('../controllers/companies-controller');
 
 const router = express.Router();
 
-router.get('/', getAllCompanys);
+router.get('/', getAllCompanies);
 router.post('/', addCompany);
 router.get('/:id', getCompanyById);
 router.delete('/:id', deleteCompany);

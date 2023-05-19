@@ -1,4 +1,4 @@
-const HELPERS = require('../helpers/companys-helper');
+const HELPERS = require('../helpers/companies-helper');
 
 const addCompany = async (req, res) => {
     let company = req.body;
@@ -6,9 +6,9 @@ const addCompany = async (req, res) => {
     res.send(data);
 }
 
-const getAllCompanys = async (req, res) => {
-    let getAllCompanys = await HELPERS.getAllCompanys();
-    res.send(getAllCompanys);
+const getAllCompanies = async (req, res) => {
+    let getAllCompanies = await HELPERS.getAllCompanies();
+    res.send(getAllCompanies);
 }
 
 const getCompanyById = async (req, res) => {
@@ -33,7 +33,7 @@ const updateCompany = async (req, res) => {
 
 module.exports = { 
     addCompany,
-    getAllCompanys,
+    getAllCompanies,
     getCompanyById,
     deleteCompany,
     updateCompany
