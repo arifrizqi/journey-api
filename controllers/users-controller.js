@@ -1,3 +1,5 @@
+const multer = require('../middlewares/multer');
+const uploadToGCS = require('../utils/uploadToGCS');
 const HELPERS = require('../helpers/users-helper');
 
 const getUsers = async (req, res) => {
@@ -6,9 +8,23 @@ const getUsers = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-    let user = req.body;
-    let data = await HELPERS.addUser(user);
-    res.send(data);
+    // handle file upload
+    multer.single('profile_photo_url')(req, res, async function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+
+        let user = req.body;
+
+        // upload file to Google Cloud Storage
+        if (req.file) {
+            const imageUrl = await uploadToGCS(req.file);
+            user.profile_photo_url = imageUrl;
+        }
+
+        let data = await HELPERS.addUser(user);
+        res.send(data);
+    });
 }
 
 const getUserById = async (req, res) => {
