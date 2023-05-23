@@ -90,42 +90,51 @@ const deleteCompany = async (id) => {
 }
 
 
-const updateCompany = async (id, name, address, city, province, logo, desc, empolyees, sector, email, password) => {
+const updateCompany = async (id, name, address, city, province, desc, employees, password, sector, email, logo) => {
     try {
-        const userRef = companies.doc(id);
-        const userDoc = await userRef.get();
-    
-        if (!userDoc.exists) {
-          res.status(404).send('User not found!');
-          return;
-        }
-        let hashedPassword = userDoc.data().password;
-        if (password) {
-            hashedPassword = await bcrypt.hash(password, 10);
-        }
-
-        await userRef.update({
-            name: name || userDoc.data().name,
-            address: address || userDoc.data().address,
-            city: city || userDoc.data().city,
-            province: province || userDoc.data().province,
-            logo: logo || userDoc.data().logo,
-            desc: desc || userDoc.data().desc,
-            empolyees: empolyees || userDoc.data().empolyees,
-            sector: sector || userDoc.data().sector,
-            email: email || userDoc.data().email,
-            password: hashedPassword
-        });
-    
+      const companyRef = companies.doc(id);
+      const companyDoc = await companyRef.get();
+  
+      if (!companyDoc.exists) {
         return {
-            status: 'Success'
-        }
-      } catch (error) {
-        return {
-            status: 'Error'
-        }
-      } 
-}
+          status: 'Error',
+          message: 'Company not found!',
+        };
+      }
+  
+      let updatedData = {
+        name: name || companyDoc.data().name,
+        address: address || companyDoc.data().address,
+        city: city || companyDoc.data().city,
+        province: province || companyDoc.data().province,
+        desc: desc || companyDoc.data().desc,
+        sector: sector || companyDoc.data().sector,
+        employees: employees || companyDoc.data().employees,
+        email: email || companyDoc.data().email,
+      };
+  
+      if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        updatedData.password = hashedPassword;
+      }
+  
+      if (logo) {
+        updatedData.logo = logo;
+      }
+  
+      await companyRef.update(updatedData);
+  
+      return {
+        status: 'Success',
+      };
+    } catch (error) {
+      return {
+        status: 'Error',
+        message: error.message,
+      };
+    }
+  };
+  
 
 
 module.exports = {

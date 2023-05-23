@@ -93,37 +93,60 @@ const deleteUser = async (id) => {
     }
 }
 
-const updateUser = async (id, full_name, email, age, gender, address, disability, password) => {
+const updateUser = async (
+    id,
+    full_name,
+    email,
+    age,
+    gender,
+    address,
+    disability,
+    password,
+    phone_number,
+    profile_photo_url
+  ) => {
     try {
-        const userRef = users.doc(id);
-        const userDoc = await userRef.get();
-    
-        if (!userDoc.exists) {
-          res.status(404).send('User not found!');
-          return;
-        }
-        
+      const userRef = users.doc(id);
+      const userDoc = await userRef.get();
+  
+      if (!userDoc.exists) {
+        return {
+          status: 'Error',
+          message: 'User not found!',
+        };
+      }
+  
+      let updatedData = {
+        full_name: full_name || userDoc.data().full_name,
+        email: email || userDoc.data().email,
+        age: age || userDoc.data().age,
+        gender: gender || userDoc.data().gender,
+        address: address || userDoc.data().address,
+        phone_number: phone_number || userDoc.data().phone_number,
+        disability: disability || userDoc.data().disability,
+      };
+  
+      if (password) {
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        await userRef.update({
-            full_name: full_name || userDoc.data().full_name,
-            email: email || userDoc.data().email,
-            age: age || userDoc.data().age,
-            gender: gender || userDoc.data().gender,
-            address: address || userDoc.data().address,
-            disability: disability || userDoc.data().disability,
-            password: hashedPassword || userDoc.data().password
-        });
-    
-        return {
-            status: 'Success'
-        }
-      } catch (error) {
-        return {
-            status: 'Error'
-        }
-      } 
-}
+        updatedData.password = hashedPassword;
+      }
+  
+      if (profile_photo_url) {
+        updatedData.profile_photo_url = profile_photo_url;
+      }
+  
+      await userRef.update(updatedData);
+  
+      return {
+        status: 'Success',
+      };
+    } catch (error) {
+      return {
+        status: 'Error',
+        message: error.message,
+      };
+    }
+  };
 
 
 module.exports = {

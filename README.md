@@ -107,7 +107,7 @@ Journey RestAPI
     {
     "status": "Success",
     "data": {
-        "empolyees": "int",
+        "employees": "int",
         "password": "string",
         "address": "string",
         "province": "string",
@@ -132,7 +132,7 @@ Journey RestAPI
       "province": "string",
       "logo": "string",
       "desc": "string",
-      "empolyees": "int",
+      "employees": "int",
       "sector": "string",
       "email": "string",
       "password": "string",
@@ -158,7 +158,7 @@ Journey RestAPI
       "province": "string",
       "logo": "string",
       "desc": "string",
-      "empolyees": "int",
+      "employees": "int",
       "sector": "string",
       "email": "string",
       "password": "string"
