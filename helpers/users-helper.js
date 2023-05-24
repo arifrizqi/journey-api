@@ -11,6 +11,7 @@ const addUser = async (user) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const userWithTimestamp = {
             ...user,
+            roleId: 1,
             created_at: timestamp,
             password: hashedPassword
         }

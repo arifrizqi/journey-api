@@ -1,6 +1,6 @@
+const HELPERS = require('../helpers/companies-helper');
 const multer = require('../middlewares/multer');
 const uploadToGCS = require('../utils/uploadToGCS');
-const HELPERS = require('../helpers/companies-helper');
 
 const addCompany = async (req, res) => {
     // handle file upload

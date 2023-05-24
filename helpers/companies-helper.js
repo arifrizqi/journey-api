@@ -9,6 +9,7 @@ const addCompany = async (company) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const companyWithHashedPassword = {
             ...company,
+            roleId: 2,
             password: hashedPassword
         }
         let data = await companies.add(companyWithHashedPassword);

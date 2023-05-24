@@ -1,6 +1,6 @@
+const HELPERS = require('../helpers/users-helper');
 const multer = require('../middlewares/multer');
 const uploadToGCS = require('../utils/uploadToGCS');
-const HELPERS = require('../helpers/users-helper');
 
 const getUsers = async (req, res) => {
     let getUser = await HELPERS.getAllUsers();
@@ -40,45 +40,45 @@ const deleteUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { full_name, email, age, gender, address, disability, phone_number, password } = req.body;
-  
-      multer.single('profile_photo_url')(req, res, async function (err) {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-  
-        let profile_photo_url = req.body.profile_photo_url;
-  
-        if (req.file) {
-          const imageUrl = await uploadToGCS(req.file);
-          profile_photo_url = imageUrl;
-        }
-  
-        const userData = await HELPERS.updateUser(
-          id,
-          full_name,
-          email,
-          age,
-          gender,
-          address,
-          disability,
-          password,
-          phone_number,
-          profile_photo_url
-        );
-  
-        if (userData.status === 'Success') {
-          res.send({ status: 'Success' });
-        } else {
-          res.status(404).send({ status: 'Error', message: 'User not found!' });
-        }
-      });
-    } catch (error) {
-      res.status(500).send({ status: 'Error', message: error.message });
-    }
-  };
+  try {
+    const { id } = req.params;
+    const { full_name, email, age, gender, address, disability, phone_number, password } = req.body;
+
+    multer.single('profile_photo_url')(req, res, async function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      let profile_photo_url = req.body.profile_photo_url;
+
+      if (req.file) {
+        const imageUrl = await uploadToGCS(req.file);
+        profile_photo_url = imageUrl;
+      }
+
+      const userData = await HELPERS.updateUser(
+        id,
+        full_name,
+        email,
+        age,
+        gender,
+        address,
+        disability,
+        password,
+        phone_number,
+        profile_photo_url
+      );
+
+      if (userData.status === 'Success') {
+        res.send({ status: 'Success' });
+      } else {
+        res.status(404).send({ status: 'Error', message: 'User not found!' });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({ status: 'Error', message: error.message });
+  }
+};
 
 module.exports = {
     getUsers,
