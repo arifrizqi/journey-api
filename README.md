@@ -44,9 +44,7 @@ Journey RestAPI
       "profile_photo_url": "string",
       "gender": "string",
       "age": "int",
-      "phone_number": "int",
-      "created_at": "int",
-      "roleId": "int"
+      "phone_number": "int"
     }
     ```
     Response:
@@ -135,8 +133,7 @@ Journey RestAPI
       "employees": "int",
       "sector": "string",
       "email": "string",
-      "password": "string",
-      "roleId": : "int"
+      "password": "string"
     }
     ```
     Response:
