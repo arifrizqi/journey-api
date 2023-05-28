@@ -1,37 +1,51 @@
-const { Storage } = require('@google-cloud/storage');
-const CREDENTIALS = require('../key.json');
-const storage = new Storage({
-    projectId: CREDENTIALS.project_id,
-    credentials: {
-        client_email: CREDENTIALS.client_email,
-        private_key: CREDENTIALS.private_key
-    }
-});
+'use strict'
+const {Storage} = require('@google-cloud/storage')
+const fs = require('fs')
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
 
-const bucketName = 'journey-apis.appspot.com';
+const pathKey = path.resolve('../key.json')
 
-const uploadToGCS = async (file) => {
-    const blob = storage.bucket(bucketName).file(Date.now() + file.originalname);
-    const blobStream = blob.createWriteStream({
-        resumable: false
-    });
-    blobStream.on('error', err => {
-        console.log(err);
-    });
+// TODO: Sesuaikan konfigurasi Storage
+const gcs = new Storage({
+    projectId: 'journey-api',
+    keyFilename: pathKey
+})
 
-    const promise = new Promise((resolve, reject) => {
-        blobStream.on('finish', () => {
-            // The public URL can be used to directly access the file via HTTP.
-            const publicUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
-            resolve(publicUrl);
-        });
-        blobStream.on('error', err => {
-            reject(err);
-        });
-        blobStream.end(file.buffer);
-    });
+// TODO: Tambahkan nama bucket yang digunakan
+const bucketName = 'journey-bangkit'
+const bucket = gcs.bucket(bucketName)
 
-    return promise;
+function getPublicUrl(filename) {
+    return 'https://storage.googleapis.com/' + bucketName + '/' + filename;
 }
 
-module.exports = uploadToGCS;
+let ImgUpload = {}
+
+ImgUpload.uploadToGcs = (req, res, next) => {
+    if (!req.file) return next()
+    const originalExtension = path.extname(req.file.originalname)
+    const gcsname = uuidv4() + originalExtension
+    const file = bucket.file(gcsname)
+
+    const stream = file.createWriteStream({
+        metadata: {
+            contentType: req.file.mimetype
+        }
+    })
+
+    stream.on('error', (err) => {
+        req.file.cloudStorageError = err
+        next(err)
+    })
+
+    stream.on('finish', () => {
+        req.file.cloudStorageObject = gcsname
+        req.file.cloudStoragePublicUrl = getPublicUrl(gcsname)
+        next()
+    })
+
+    stream.end(req.file.buffer)
+}
+
+module.exports = ImgUpload

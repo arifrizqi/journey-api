@@ -1,15 +1,14 @@
-const multer = require('multer');
 const express = require('express');
+const imgUpload = require('../utils/uploadToGCS');
+const multer = require('../middlewares/multer');
 const router = express.Router();
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
 const companiesController = require('../controllers/companies-controller');
 
-router.get('/', );
-router.get('/:id',);
-router.post('/', upload.single('logo'), companiesController.addCompany);
-router.put('/:id', );
-router.delete('/:id', );
+router.get('/', companiesController.getAllCompanies);
+router.get('/:id',companiesController.getCompanyById);
+router.post('/', multer.single('logo'), imgUpload.uploadToGcs, companiesController.addCompany);
+router.put('/:id', multer.single('logo'), imgUpload.uploadToGcs, companiesController.updateCompany);
+router.delete('/:id', companiesController.deleteCompany);
 
 module.exports = router;

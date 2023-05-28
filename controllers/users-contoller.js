@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 
 function query(sql, values) {
@@ -14,18 +15,25 @@ function query(sql, values) {
   }
 const usersController = {
     addUser: async (req, res) => {
-        const { full_name, email, password, id_disability, address, profile_photo_url, gender, age, phone_number } = req.body;
+        const { full_name, email, password, skill_one, skill_two, id_disability, address, gender, age, phone_number } = req.body;
         const id = uuidv4();
         const roleId = 1; //
+        var profile_photo_url = ''
 
-        const sql = `INSERT INTO users (id, full_name, email, password, id_disability, address, profile_photo_url, gender, age, phone_number, created_at, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`;
+        if (req.file && req.file.cloudStoragePublicUrl) {
+          profile_photo_url = req.file.cloudStoragePublicUrl
+      }
 
-        const values = [id, full_name, email, password, id_disability, address, profile_photo_url, gender, age, phone_number, roleId];
+      const hash = bcrypt.hashSync(password, 10);
+
+        const sql = `INSERT INTO users (id, full_name, email, password, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, created_at, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`;
+
+        const values = [id, full_name, email, hash, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, roleId];
 
         db.query(sql, values, (err, result) => {
             if (err) {
               console.error(err);
-              res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam menambahkan pengguna' });
+              res.status(500).json({ status: 'Error', message: err.sqlMessage });
             } else {
               res.json({ status: 'Success', message: 'Pengguna berhasil ditambahkan', id });
             }
@@ -90,20 +98,57 @@ const usersController = {
     },
 
     updateUser: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { full_name, email, password, id_disability, address, profile_photo_url, gender, age, phone_number } = req.body;
-        
-            const sql = `UPDATE users SET full_name = ?, email = ?, password = ?, id_disability = ?, address = ?, profile_photo_url = ?, gender = ?, age = ?, phone_number = ?, WHERE id = ?`;
-            const values = [full_name, email, password, id_disability, address, profile_photo_url, gender, age, phone_number, id];
-        
-            await query(sql, values);
-        
-            res.json({ status: 'Success', message: 'Pengguna berhasil diperbarui' });
-          } catch (error) {
-            console.error(error);
-            res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memperbarui pengguna' });
-          }
+      const userId = req.params.id; // Mengambil ID perusahaan dari parameter permintaan
+      const { full_name, email, password, id_disability, address, gender, age, phone_number, skill_one, skill_two } = req.body;
+  
+      // Periksa apakah ada file gambar yang diunggah
+      let profile_photo_url = '';
+      if (req.file && req.file.cloudStoragePublicUrl) {
+        profile_photo_url = req.file.cloudStoragePublicUrl;
+      }
+  
+      // Cek apakah password berubah
+      let hash = null;
+      if (password) {
+        hash = bcrypt.hashSync(password, 10);
+      }
+  
+      const query = `UPDATE users SET 
+        full_name = COALESCE(?, full_name), 
+        email = COALESCE(?, email), 
+        password = COALESCE(?, password), 
+        skill_two = COALESCE(?, skill_two),
+        skill_one = COALESCE(?, skill_one),
+        id_disability = COALESCE(?, id_disability), 
+        profile_photo_url = COALESCE(?, profile_photo_url), 
+        address = COALESCE(?, address), 
+        gender = COALESCE(?, gender), 
+        age = COALESCE(?, age), 
+        phone_number = COALESCE(?, phone_number) 
+        WHERE id = ?`;
+  
+      const values = [
+        full_name,
+        email,
+        password,
+        skill_one,
+        skill_two,
+        id_disability,
+        profile_photo_url || null,
+        address,
+        gender,
+        age,
+        phone_number,
+        userId
+      ];
+  
+      db.query(query, values, (err, rows, fields) => {
+        if (err) {
+          res.status(500).send({ message: err.sqlMessage });
+        } else {
+          res.send({ message: "Update Successful" });
+        }
+      });
     },
 
     deleteUser: async (req, res) => {
