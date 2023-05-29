@@ -18,11 +18,11 @@ const usersController = {
         const { full_name, email, password, skill_one, skill_two, id_disability, address, gender, age, phone_number } = req.body;
         const id = uuidv4();
         const roleId = 1; //
-        var profile_photo_url = ''
+        var profile_photo_url = 'https://storage.googleapis.com/journey-bangkit/profile.png'
 
-        if (req.file && req.file.cloudStoragePublicUrl) {
-          profile_photo_url = req.file.cloudStoragePublicUrl
-      }
+      //   if (req.file && req.file.cloudStoragePublicUrl) {
+      //     profile_photo_url = req.file.cloudStoragePublicUrl
+      // }
 
       const hash = bcrypt.hashSync(password, 10);
 

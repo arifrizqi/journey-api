@@ -22,7 +22,7 @@ const companiesController = {
     const address = req.body.address
     const city = req.body.city
     const province = req.body.province
-    var logo = ''
+    var logo = 'https://storage.googleapis.com/journey-bangkit/company.png'
     const description = req.body.description
     const employees = req.body.employees
     const id_sector = req.body.id_sector
@@ -30,9 +30,9 @@ const companiesController = {
     const password = req.body.password
     const roleId = 2
 
-    if (req.file && req.file.cloudStoragePublicUrl) {
-        logo = req.file.cloudStoragePublicUrl
-    }
+    // if (req.file && req.file.cloudStoragePublicUrl) {
+    //     logo = req.file.cloudStoragePublicUrl
+    // }
 
     const hash = bcrypt.hashSync(password, 10);
 
