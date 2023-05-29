@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         profilePhotoUrl: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            defaultValue: "storage.googleapis.com/journey-bangkit/profile.png"
         },
         disabilityId: {
             type: DataTypes.INTEGER,
