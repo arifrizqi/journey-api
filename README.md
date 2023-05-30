@@ -240,5 +240,3 @@ Journey RestAPI
         "message": "Company berhasil dihapus"
     }
     ```
-
-    ---
