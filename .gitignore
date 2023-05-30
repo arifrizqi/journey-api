@@ -4,3 +4,10 @@ package-lock.json
 key.json
 coba.js
 test.js
+coba-lagi.js
+coba-lagi2.js
+views
+views/index.ejs
+views/dashboard.ejs
+passport-config.js
+

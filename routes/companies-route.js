@@ -8,6 +8,7 @@ const companiesController = require('../controllers/companies-controller');
 router.get('/', companiesController.getAllCompanies);
 router.get('/:id',companiesController.getCompanyById);
 router.post('/', multer.single('logo'), imgUpload.uploadToGcs, companiesController.addCompany);
+router.post('/:companyId/vacancies', multer.single('logo'), imgUpload.uploadToGcs, companiesController.addVacancy);
 router.put('/:id', multer.single('logo'), imgUpload.uploadToGcs, companiesController.updateCompany);
 router.delete('/:id', companiesController.deleteCompany);
 

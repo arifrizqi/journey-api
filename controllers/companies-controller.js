@@ -170,7 +170,37 @@ const companiesController = {
           console.error(error);
           res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam menghapus Company' });
         }
-    }
+    },
+
+    addVacancy: async (req, res) => {
+      const companyId = req.params.companyId;
+      const {
+          placement_address,
+          description,
+          sector,
+          id_disability,
+          deadline_time,
+      } = req.body;
+  
+      const vacancy = {
+          id: uuidv4(), // Anda perlu mengimplementasikan fungsi generateVacancyId() untuk membuat ID unik
+          placement_address,
+          description,
+          sector,
+          id_disability,
+          deadline_time,
+          id_company: companyId,
+        };
+  
+        db.query('INSERT INTO vacancies SET ?', vacancy, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.status(500).json({ message: 'Internal server error' });
+          } else {
+            res.status(201).json({ message: 'Vacancy created successfully' });
+          }
+        });
+      },
 };
 
 module.exports = companiesController;

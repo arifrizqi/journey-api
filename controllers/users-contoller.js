@@ -14,23 +14,31 @@ function query(sql, values) {
     });
   }
 const usersController = {
-    addUser: async (req, res) => {
-        const { full_name, email, password, skill_one, skill_two, id_disability, address, gender, age, phone_number } = req.body;
-        const id = uuidv4();
-        const roleId = 1; //
-        var profile_photo_url = 'https://storage.googleapis.com/journey-bangkit/profile.png'
-
-      //   if (req.file && req.file.cloudStoragePublicUrl) {
-      //     profile_photo_url = req.file.cloudStoragePublicUrl
-      // }
-
-      const hash = bcrypt.hashSync(password, 10);
-
-        const sql = `INSERT INTO users (id, full_name, email, password, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, created_at, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`;
-
-        const values = [id, full_name, email, hash, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, roleId];
-
-        db.query(sql, values, (err, result) => {
+  addUser: async (req, res) => {
+    const { full_name, email, password, skill_one, skill_two, id_disability, address, gender, age, phone_number } = req.body;
+    const id = uuidv4();
+    const roleId = 1;
+    const profile_photo_url = 'https://storage.googleapis.com/journey-bangkit/profile.png';
+  
+    const hash = bcrypt.hashSync(password, 10);
+  
+    // Periksa keberadaan email sebelum menambahkan pengguna
+    const checkEmailQuery = `SELECT * FROM users WHERE email = ?`;
+    const checkEmailValues = [email];
+  
+    db.query(checkEmailQuery, checkEmailValues, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ status: 'Error', message: err.sqlMessage });
+      } else {
+        if (result.length > 0) {
+          res.status(400).json({ status: 'Error', message: 'Email sudah ada dalam database' });
+        } else {
+          const sql = `INSERT INTO users (id, full_name, email, password, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, created_at, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`;
+  
+          const values = [id, full_name, email, hash, skill_one, skill_two, id_disability, address, profile_photo_url, gender, age, phone_number, roleId];
+  
+          db.query(sql, values, (err, result) => {
             if (err) {
               console.error(err);
               res.status(500).json({ status: 'Error', message: err.sqlMessage });
@@ -38,7 +46,11 @@ const usersController = {
               res.json({ status: 'Success', message: 'Pengguna berhasil ditambahkan', id });
             }
           });
-    },
+        }
+      }
+    });
+  },
+  
 
     getAllUsers: async (req, res) => {
         try {
@@ -49,7 +61,12 @@ const usersController = {
             const countResult = await query(countSql);
             const totalUsers = countResult[0].total;
         
-            const sql = 'SELECT * FROM users LIMIT ?, ?';
+            const sql = `SELECT users.*, disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
+            FROM users
+            LEFT JOIN disability ON users.id_disability = disability.id
+            LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
+            LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
+                 LIMIT ?, ?`;
             const values = [startIndex, parseInt(limit)];
         
             const result = await query(sql, values);
@@ -57,6 +74,12 @@ const usersController = {
             const users = result.map((user) => {
               const tempData = { ...user };
               tempData.id = user.id;
+              tempData.id_disability = user.disability_name;
+              tempData.skill_one = user.skill_one_name;
+              tempData.skill_two = user.skill_two_name;
+              delete tempData.disability_name;
+              delete tempData.skill_one_name;
+              delete tempData.skill_two_name;
               return tempData;
             });
         
@@ -77,25 +100,40 @@ const usersController = {
     },
 
     getUserById: async (req, res) => {
-        const { id } = req.params;
-
-        const sql = `SELECT * FROM users WHERE id = ?`;
-        const values = [id];
-
-        db.query(sql, values, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat pengguna' });
-            } else {
-              if (result.length === 0) {
-                res.status(404).json({ status: 'Error', message: 'Pengguna tidak ditemukan' });
-              } else {
-                const user = result[0];
-                res.json({ status: 'Success', user });
-              }
-            }
-          });
+      const { id } = req.params;
+    
+      const sql = `
+        SELECT users.*, disability.name AS disability_name, skils_one.name AS skill_one_name, skils_two.name AS skill_two_name
+        FROM users
+        JOIN disability ON users.id_disability = disability.id
+        JOIN skils AS skils_one ON users.skill_one = skils_one.id
+        JOIN skils AS skils_two ON users.skill_two = skils_two.id
+        WHERE users.id = ?
+      `;
+      const values = [id];
+    
+      db.query(sql, values, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat pengguna' });
+        } else {
+          if (result.length === 0) {
+            res.status(404).json({ status: 'Error', message: 'Pengguna tidak ditemukan' });
+          } else {
+            const user = result[0];
+            user.skill_one = user.skill_one_name;
+            user.skill_two = user.skill_two_name;
+            user.id_disability = user.disability_name;
+            delete user.skill_one_name;
+            delete user.skill_two_name;
+            delete user.disability_name;
+    
+            res.json({ status: 'Success', user });
+          }
+        }
+      });
     },
+    
 
     updateUser: async (req, res) => {
       const userId = req.params.id; // Mengambil ID perusahaan dari parameter permintaan
@@ -165,7 +203,41 @@ const usersController = {
             console.error(error);
             res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam menghapus pengguna' });
           }
-    }
+    },
+
+    applyJob: async (req, res) => {
+      const userId = req.params.userId;
+      const vacancyId = req.params.vacancyId;
+      const id = uuidv4();
+      
+      // Periksa keberadaan lamaran pekerjaan sebelum menambahkan
+      const checkApplyQuery = `SELECT * FROM job_apply WHERE id_user = ? AND id_vacancy = ?`;
+      const checkApplyValues = [userId, vacancyId];
+      
+      db.query(checkApplyQuery, checkApplyValues, (error, results) => {
+        if (error) {
+          console.error('Error checking job application:', error);
+          res.status(500).json({ error: 'An error occurred while checking job application' });
+        } else {
+          if (results.length > 0) {
+            res.status(400).json({ error: 'User has already applied for this job' });
+          } else {
+            const applyJobQuery = `INSERT INTO job_apply (id, id_vacancy, id_user) VALUES (?, ?, ?)`;
+            const values = [id, vacancyId, userId];
+    
+            db.query(applyJobQuery, values, (error, results) => {
+              if (error) {
+                console.error('Error applying for a job:', error);
+                res.status(500).json({ error: 'An error occurred while applying for a job' });
+              } else {
+                res.json({ message: 'Job application successful' });
+              }
+            });
+          }
+        }
+      });
+    },
+    
 
     
 }
