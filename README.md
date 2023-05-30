@@ -2,7 +2,7 @@
 Journey RestAPI
 # How To Use
 * ### Users ###
-  URL Route: `http://127.0.0.1/api/users`
+  URL Route: `http://127.0.0.1:8000/api/users`
   * **[GET]** Get Specific Users
   
     Additional Route: `<string:id>`
