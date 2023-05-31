@@ -16,21 +16,21 @@ Journey RestAPI
     ```
     {
     "status": "Success",
-    "data": {
-        "profile_photo_url": "string",
-        "password": "string",
-        "skill_one": "string",
-        "skills_two": "string",
-        "full_name": "string",
-        "address": "string",
-        "gender": "string",
-        "disability": "string",
-        "roleId": "int",
-        "created_at": "int",
-        "phone_number": "int",
-        "email": "string",
-        "age": "int"
-      }
+    "user": {
+            "id": "e75cb5a0-e855-47d3-aa30-8042bc6d9027",
+            "full_name": "John Doe",
+            "email": "johndoe@example.com",
+            "password": "$2b$10$iLxDOwX2fCUADhwgZimQnehvBRYYIITO4zmriLODUsaL2LjZKJnnm",
+            "address": "123 Main Street",
+            "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
+            "gender": "Male",
+            "age": "30",
+            "phone_number": "1234567890",
+            "created_at": "2023-05-31T09:57:15.000Z",
+            "disability_name": "Blind",
+            "skill_one_name": "video grafi",
+            "skill_two_name": "video grafi"
+        }
     }
     ```
   * **[POST]** Add New User 
@@ -38,25 +38,24 @@ Journey RestAPI
     Request: 
     ```
     {
-      "email": "string",
-      "full_name": "string",
-      "password": "string",
-      "skill_one": "string",
-      "skill_two": "string",
-      "disability": "string",
-      "address": "string",
-      "profile_photo_url": "file",
-      "gender": "string",
-      "age": "int",
-      "phone_number": "int"
+      "full_name": "John Doe",
+      "email": "johndoe@example.com",
+      "password": "password123",
+      "skill_one": "1",
+      "skill_two": "1",
+      "id_disability": "1",
+      "address": "123 Main Street",
+      "gender": "Male",
+      "age": "30",
+      "phone_number": "1234567890"
     }
     ```
     Response:
     ```
     {
         "status": "Success",
-        "message": "Pengguna berhasil ditambahkan",
-        "id": "06c6ada9-4c28-4132-8d5c-408296b62973"
+        "message": "User added successfully",
+        "id": "e75cb5a0-e855-47d3-aa30-8042bc6d9027"
     }
     ```
 
@@ -99,12 +98,12 @@ Journey RestAPI
     ```
     {
         "status": "Success",
-        "message": "Pengguna berhasil dihapus"
+        "message": "User successfully deleted"
     }
     ```
   * **[POST]** Apply Vacancy
 
-        Additional Route: `</:userId/apply/:vacancyId> `
+    Additional Route: `</:userId/apply/:vacancyId> `
 
 
     Request: 
@@ -175,7 +174,7 @@ Journey RestAPI
     Response:
     ```
     {
-        "message": "Insert Successful"
+        "message": "Company added successfully"
     }
     ```
   * **[POST]** Add vacancy
@@ -222,6 +221,7 @@ Journey RestAPI
         "message": "Update Successful"
     }
     ```
+
   * **[DELETE]** Delete Specific Company
   
     Additional Route: `<string:id>`
@@ -237,6 +237,75 @@ Journey RestAPI
     ```
     {
         "status": "Success",
-        "message": "Company berhasil dihapus"
+        "message": "Company deleted successfuly"
+    }
+    ```
+
+---
+* ### Vacancies ###
+  URL Route: `http://127.0.0.1:8000/api/vacancies`
+  * **[GET]** Get Specific vacancy
+  
+    Additional Route: `<string:id>`
+    
+    Request: 
+    ```
+    (Null)
+    ```
+    
+    Response:
+    ```
+    {
+      "status": "Success",
+      "vacancy": {
+          "id": "dfe9725b-0e45-4732-8e29-7091e41574c4",
+          "placement_address": "string",
+          "description": "description",
+          "sector": "string",
+          "created_at": "2023-05-31T10:12:45.820Z",
+          "updated_at": "2023-05-31T10:12:45.820Z",
+          "disability_name": "string",
+          "deadline_time": "2023-05-29T09:14:30.000Z",
+          "company_name": "string"
+        }
+    }
+    ```
+
+    
+  * **[PUT]** Edit Vacancy
+  
+    Request:
+    ```
+    {
+        "placement_address": "string",
+        "description": "string",
+        "sector": "string",
+        "id_disability": "int",
+        "deadline_time": "date"
+    }
+    ```
+    Response:
+    ```
+    {
+        "message": "Update Successful"
+    }
+    ```
+
+  * **[DELETE]** Delete Specific Vacancy
+  
+    Additional Route: `<string:id>`
+    
+    Request:
+
+    ```
+    (null)
+    ```
+
+    Response:
+
+    ```
+    {
+        "status": "Success",
+        "message": "Vacancy deleted successfully"
     }
     ```

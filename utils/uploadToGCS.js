@@ -1,19 +1,15 @@
 'use strict'
+require('dotenv').config()
 const {Storage} = require('@google-cloud/storage')
-const fs = require('fs')
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-
 const pathKey = path.resolve('../key.json')
-
-// TODO: Sesuaikan konfigurasi Storage
 const gcs = new Storage({
-    projectId: 'journey-api',
+    projectId: pathKey.project_id,
     keyFilename: pathKey
 })
 
-// TODO: Tambahkan nama bucket yang digunakan
-const bucketName = 'journey-bangkit'
+const bucketName = process.env.BUCKET_NAME
 const bucket = gcs.bucket(bucketName)
 
 function getPublicUrl(filename) {

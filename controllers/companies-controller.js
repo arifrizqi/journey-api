@@ -16,7 +16,6 @@ function query(sql, values) {
 
 const companiesController = {
   addCompany: async (req, res) => {
-    // const id = req.body.id
     const id = uuidv4();
     const name = req.body.name
     const address = req.body.address
@@ -30,10 +29,6 @@ const companiesController = {
     const password = req.body.password
     const roleId = 2
 
-    // if (req.file && req.file.cloudStoragePublicUrl) {
-    //     logo = req.file.cloudStoragePublicUrl
-    // }
-
     const hash = bcrypt.hashSync(password, 10);
 
     const query = "INSERT INTO companies (id, name, address, city, province, logo, description, employees, id_sector, email, password, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -42,7 +37,7 @@ const companiesController = {
         if (err) {
             res.status(500).send({message: err.sqlMessage})
         } else {
-            res.send({message: "Insert Successful"})
+            res.send({message: "Company added successfully"})
         }
     });
   },
@@ -108,7 +103,12 @@ const companiesController = {
         const countResult = await query(countSql);
         const totalCompanies = countResult[0].total;
     
-        const sql = 'SELECT * FROM companies LIMIT ?, ?';
+        const sql = `
+        SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.description, companies.employees, companies.email, companies.password, companies.roleId, company_sector.name AS sector_name
+        FROM companies
+        INNER JOIN company_sector ON companies.id_sector = company_sector.id
+        LIMIT ?, ?
+      `;
         const values = [startIndex, parseInt(limit)];
     
         const result = await query(sql, values);
@@ -131,23 +131,25 @@ const companiesController = {
         });
       } catch (error) {
         console.error(error);
-        res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat pengguna' });
+        res.status(500).json({ status: 'Error', message: 'An error occurred loading company' });
       }
   },
 
   getCompanyById: async (req, res) => {
     const { id } = req.params;
 
-    const sql = `SELECT * FROM companies WHERE id = ?`;
+    const sql = `SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.description, companies.employees, companies.email, companies.password, companies.roleId, company_sector.name AS sector_name
+    FROM companies
+    INNER JOIN company_sector ON companies.id_sector = company_sector.id WHERE companies.id = ?`;
     const values = [id];
 
     db.query(sql, values, (err, result) => {
         if (err) {
           console.error(err);
-          res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat company' });
+          res.status(500).json({ status: 'Error', message: 'An error occurred loading company' });
         } else {
           if (result.length === 0) {
-            res.status(404).json({ status: 'Error', message: 'Company tidak ditemukan' });
+            res.status(404).json({ status: 'Error', message: 'Company not found' });
           } else {
             const company = result[0];
             res.json({ status: 'Success', company });
@@ -165,10 +167,10 @@ const companiesController = {
       
           await query(sql, values);
       
-          res.json({ status: 'Success', message: 'Company berhasil dihapus' });
+          res.json({ status: 'Success', message: 'Company successfully deleted' });
         } catch (error) {
           console.error(error);
-          res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam menghapus Company' });
+          res.status(500).json({ status: 'Error', message: 'Error deleting Company' });
         }
     },
 
@@ -183,7 +185,7 @@ const companiesController = {
       } = req.body;
   
       const vacancy = {
-          id: uuidv4(), // Anda perlu mengimplementasikan fungsi generateVacancyId() untuk membuat ID unik
+          id: uuidv4(),
           placement_address,
           description,
           sector,

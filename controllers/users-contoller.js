@@ -43,7 +43,7 @@ const usersController = {
               console.error(err);
               res.status(500).json({ status: 'Error', message: err.sqlMessage });
             } else {
-              res.json({ status: 'Success', message: 'Pengguna berhasil ditambahkan', id });
+              res.json({ status: 'Success', message: 'User added successfully', id });
             }
           });
         }
@@ -61,7 +61,7 @@ const usersController = {
             const countResult = await query(countSql);
             const totalUsers = countResult[0].total;
         
-            const sql = `SELECT users.*, disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
+            const sql = `SELECT users.id, users.full_name, users.email, users.password, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, users.created_at, disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
             FROM users
             LEFT JOIN disability ON users.id_disability = disability.id
             LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
@@ -73,13 +73,6 @@ const usersController = {
         
             const users = result.map((user) => {
               const tempData = { ...user };
-              tempData.id = user.id;
-              tempData.id_disability = user.disability_name;
-              tempData.skill_one = user.skill_one_name;
-              tempData.skill_two = user.skill_two_name;
-              delete tempData.disability_name;
-              delete tempData.skill_one_name;
-              delete tempData.skill_two_name;
               return tempData;
             });
         
@@ -95,7 +88,7 @@ const usersController = {
             });
           } catch (error) {
             console.error(error);
-            res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat pengguna' });
+            res.status(500).json({ status: 'Error', message: 'An error occurred loading the user' });
           }
     },
 
@@ -103,7 +96,7 @@ const usersController = {
       const { id } = req.params;
     
       const sql = `
-        SELECT users.*, disability.name AS disability_name, skils_one.name AS skill_one_name, skils_two.name AS skill_two_name
+        SELECT users.id, users.full_name, users.email, users.password, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, users.created_at, disability.name AS disability_name, skils_one.name AS skill_one_name, skils_two.name AS skill_two_name
         FROM users
         JOIN disability ON users.id_disability = disability.id
         JOIN skils AS skils_one ON users.skill_one = skils_one.id
@@ -115,18 +108,12 @@ const usersController = {
       db.query(sql, values, (err, result) => {
         if (err) {
           console.error(err);
-          res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam memuat pengguna' });
+          res.status(500).json({ status: 'Error', message: 'An error occurred loading the user' });
         } else {
           if (result.length === 0) {
-            res.status(404).json({ status: 'Error', message: 'Pengguna tidak ditemukan' });
+            res.status(404).json({ status: 'Error', message: 'User not found' });
           } else {
             const user = result[0];
-            user.skill_one = user.skill_one_name;
-            user.skill_two = user.skill_two_name;
-            user.id_disability = user.disability_name;
-            delete user.skill_one_name;
-            delete user.skill_two_name;
-            delete user.disability_name;
     
             res.json({ status: 'Success', user });
           }
@@ -136,7 +123,7 @@ const usersController = {
     
 
     updateUser: async (req, res) => {
-      const userId = req.params.id; // Mengambil ID perusahaan dari parameter permintaan
+      const userId = req.params.id;
       const { full_name, email, password, id_disability, address, gender, age, phone_number, skill_one, skill_two } = req.body;
   
       // Periksa apakah ada file gambar yang diunggah
@@ -198,10 +185,10 @@ const usersController = {
         
             await query(sql, values);
         
-            res.json({ status: 'Success', message: 'Pengguna berhasil dihapus' });
+            res.json({ status: 'Success', message: 'User successfully deleted' });
           } catch (error) {
             console.error(error);
-            res.status(500).json({ status: 'Error', message: 'Terjadi kesalahan dalam menghapus pengguna' });
+            res.status(500).json({ status: 'Error', message: 'An error occurred deleting the user' });
           }
     },
 
