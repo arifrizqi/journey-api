@@ -80,18 +80,67 @@ const vacanciesController = {
         },
 
         popular: async (req, res) => {
-          db.query(
-            'SELECT vacancies.id, vacancies.placement_address, vacancies.description, COUNT(job_apply.id_user) AS total_applicants FROM vacancies LEFT JOIN job_apply ON vacancies.id = job_apply.id_vacancy GROUP BY vacancies.id ORDER BY total_applicants DESC',
-            (err, results) => {
-              if (err) {
-                console.error('Failed to get popular job vacancies:', err);
-                res.status(500).json({ error: 'Failed to get popular job vacancies' });
-              } else {
-                res.status(200).json(results);
-              }
+          const { page, perPage } = req.query;
+          const currentPage = parseInt(page) || 1;
+          const itemsPerPage = parseInt(perPage) || 10;
+          const startIndex = (currentPage - 1) * itemsPerPage;
+        
+          const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
+          const query = `
+            SELECT vacancies.id, vacancies.placement_address, vacancies.description, COUNT(job_apply.id_user) AS total_applicants 
+            FROM vacancies 
+            LEFT JOIN job_apply ON vacancies.id = job_apply.id_vacancy 
+            GROUP BY vacancies.id 
+            ORDER BY total_applicants DESC 
+            LIMIT ?, ?
+          `;
+        
+          db.query(totalCountQuery, (err, countResult) => {
+            if (err) {
+              console.error('Failed to get total count:', err);
+              res.status(500).json({ error: 'Failed to get total count' });
+            } else {
+              const totalItems = countResult[0].total;
+              db.query(query, [startIndex, itemsPerPage], (err, results) => {
+                if (err) {
+                  console.error('Failed to get popular job vacancies:', err);
+                  res.status(500).json({ error: 'Failed to get popular job vacancies' });
+                } else {
+                  const totalPages = Math.ceil(totalItems / itemsPerPage);
+                  res.status(200).json({ currentPage, totalPages, totalItems, results });
+                }
+              });
             }
-          );
-        }
+          });
+        },
+
+        latest: async (req, res) => {
+          const { page, perPage } = req.query;
+          const currentPage = parseInt(page) || 1;
+          const itemsPerPage = parseInt(perPage) || 10;
+          const startIndex = (currentPage - 1) * itemsPerPage;
+        
+          const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
+          const query = 'SELECT * FROM vacancies ORDER BY created_at DESC LIMIT ?, ?';
+        
+          db.query(totalCountQuery, (err, countResult) => {
+            if (err) {
+              console.error('Failed to get total count:', err);
+              res.status(500).json({ error: 'Failed to get total count' });
+            } else {
+              const totalItems = countResult[0].total;
+              db.query(query, [startIndex, itemsPerPage], (err, results) => {
+                if (err) {
+                  console.error('Failed to get latest job vacancies:', err);
+                  res.status(500).json({ error: 'Failed to get latest job vacancies' });
+                } else {
+                  const totalPages = Math.ceil(totalItems / itemsPerPage);
+                  res.status(200).json({ currentPage, totalPages, totalItems, results });
+                }
+              });
+            }
+          });
+        },
       
 }
 

@@ -411,18 +411,49 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Popular vacancy
+  * **[GET]** Get Popular Vacancy
   
     Additional Route: `<popular>`
     
     Response:
     ```
-    [
-        {
-            "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
-            "placement_address": "Lowongan Programmer",
-            "description": "description",
-            "total_applicants": 1
-        }
-    ]
+    {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 3,
+      "results": [
+            {
+                "id": "6258a8da-4da8-41f2-8df8-865e9d34e22b",
+                "placement_address": "Lowongan Programmer",
+                "description": "description",
+                "sector": "asda",
+                "id_disability": "1",
+                "deadline_time": "2023-05-29T09:14:30.000Z",
+                "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
+                "created_at": "2023-06-01T09:13:28.182Z",
+                "updated_at": "2023-06-01T09:13:28.182Z"
+            }
+        ]
+    }
+    ```
+
+    * **[GET]** Get Latest Vacancy
+  
+    Additional Route: `<latest>`
+    
+    Response:
+    ```
+    {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 3,
+      "results": [
+            {
+                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
+                "placement_address": "Lowongan Programmer",
+                "description": "description",
+                "total_applicants": 1
+            },
+        ]
+    }
     ```
