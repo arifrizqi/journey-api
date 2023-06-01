@@ -196,13 +196,161 @@ const companiesController = {
   
         db.query('INSERT INTO vacancies SET ?', vacancy, (err, result) => {
           if (err) {
-            console.log(err);
             res.status(500).json({ message: 'Internal server error' });
           } else {
             res.status(201).json({ message: 'Vacancy created successfully' });
           }
         });
       },
+
+      getAllVacancies: async(req, res) => {
+        const { companyId } = req.params;
+  const { page = 1, limit = 10 } = req.query;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  try {
+    const countQuery = 'SELECT COUNT(*) as totalCount FROM vacancies WHERE id_company = ?';
+    const vacanciesQuery = 'SELECT * FROM vacancies WHERE id_company = ? LIMIT ?, ?';
+
+    // Menghitung total jumlah lowongan kerja
+    const totalCount = await new Promise((resolve, reject) => {
+      db.query(countQuery, companyId, (err, results) => {
+        if (err) {
+          console.error('Failed to get the total number of job vacancies:', err);
+          reject('Failed to get the total number of job vacancies');
+        } else {
+          resolve(results[0].totalCount);
+        }
+      });
+    });
+
+    // Mendapatkan lowongan kerja sesuai dengan pagination
+    const vacancies = await new Promise((resolve, reject) => {
+      db.query(vacanciesQuery, [companyId, startIndex, limit], (err, results) => {
+        if (err) {
+          console.error('Failed to get a job:', err);
+          reject('Failed to get a job');
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    const response = {
+      totalCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+      vacancies,
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Terjadi kesalahan:', error);
+    res.status(500).json({ error });
+  }
+      },
+
+      getVacancyById: async(req, res) => {
+        const { companyId, vacancyId } = req.params;
+
+        db.query(
+          'SELECT * FROM vacancies WHERE id_company = ? AND id = ?',
+          [companyId, vacancyId],
+          (err, results) => {
+            if (err) {
+              console.error('Failed to get a job:', err);
+              res.status(500).json({ error: 'Failed to get a job' });
+            } else {
+              if (results.length === 0) {
+                res.status(404).json({ error: 'Job vacancies not found' });
+              } else {
+                res.status(200).json(results[0]);
+              }
+            }
+          }
+        );
+      },
+
+      updateVacancyByCompany: (req, res) => {
+        const { companyId, vacancyId } = req.params;
+        const { placement_address, description, sector, id_disability, deadline_time } = req.body;
+
+        const updatedVacancy = {};
+
+        if (placement_address) {
+          updatedVacancy.placement_address = placement_address;
+        }
+        if (description) {
+          updatedVacancy.description = description;
+        }
+        if (sector) {
+          updatedVacancy.sector = sector;
+        }
+        if (id_disability) {
+          updatedVacancy.id_disability = id_disability;
+        }
+        if (deadline_time) {
+          updatedVacancy.deadline_time = deadline_time;
+        }
+
+        db.query(
+          'UPDATE vacancies SET ? WHERE id_company = ? AND id = ?',
+          [updatedVacancy, companyId, vacancyId],
+          (err, result) => {
+            if (err) {
+              console.error('Failed to update job vacancies:', err);
+              res.status(500).json({ error: 'Failed to update job vacancies' });
+            } else {
+              if (result.affectedRows === 0) {
+                res.status(404).json({ error: 'Job vacancies not found' });
+              } else {
+                res.status(200).json({ message: 'Job vacancies updated successfully' });
+              }
+            }
+          }
+        );
+      },
+
+      deleteVacancyByCompany: async(req, res) => {
+        const { companyId, vacancyId } = req.params;
+
+        db.query(
+          'DELETE FROM vacancies WHERE id_company = ? AND id = ?',
+          [companyId, vacancyId],
+          (err, result) => {
+            if (err) {
+              console.error('Failed to delete job posting:', err);
+              res.status(500).json({ error: 'Failed to delete job posting' });
+            } else {
+              if (result.affectedRows === 0) {
+                res.status(404).json({ error: 'Job vacancies not found' });
+              } else {
+                res.status(200).json({ message: 'Job Vacancies Deleted Successfully' });
+              }
+            }
+          }
+        );
+      },
+
+      applicants: async (req, res) => {
+        const { companyId, vacancyId } = req.params;
+
+  db.query(
+    'SELECT users.id, users.full_name, users.email, users.skill_one, users.skill_two, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, job_apply.created_at AS applied_at FROM users INNER JOIN job_apply ON users.id = job_apply.id_user WHERE job_apply.id_vacancy = ?',
+    vacancyId,
+    (err, results) => {
+      if (err) {
+        console.error('Failed to get a list of applicants:', err);
+        res.status(500).json({ error: 'Failed to get a list of applicants' });
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
+      }
+
+      
 };
 
 module.exports = companiesController;

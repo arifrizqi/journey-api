@@ -79,54 +79,18 @@ const vacanciesController = {
           });
         },
 
-        updateVacancy: async (req, res) => {
-            const vacancyId = req.params.id;
-            const { placement_address, description, sector, id_disability, deadline_time, id_company } = req.body;
-          
-            const query = `UPDATE vacancies SET 
-              placement_address = COALESCE(?, placement_address),
-              description = COALESCE(?, description),
-              sector = COALESCE(?, sector),
-              id_disability = COALESCE(?, id_disability),
-              deadline_time = COALESCE(?, deadline_time),
-              id_company = COALESCE(?, id_company),
-              updated_at = CURRENT_TIMESTAMP
-              WHERE id = ?`;
-          
-            const values = [
-              placement_address,
-              description,
-              sector,
-              id_disability,
-              deadline_time,
-              id_company,
-              vacancyId
-            ];
-          
-            db.query(query, values, (err, rows, fields) => {
+        popular: async (req, res) => {
+          db.query(
+            'SELECT vacancies.id, vacancies.placement_address, vacancies.description, COUNT(job_apply.id_user) AS total_applicants FROM vacancies LEFT JOIN job_apply ON vacancies.id = job_apply.id_vacancy GROUP BY vacancies.id ORDER BY total_applicants DESC',
+            (err, results) => {
               if (err) {
-                res.status(500).send({ message: err.sqlMessage });
+                console.error('Failed to get popular job vacancies:', err);
+                res.status(500).json({ error: 'Failed to get popular job vacancies' });
               } else {
-                res.send({ message: "Update Successful" });
+                res.status(200).json(results);
               }
-            });
-          },
-          
-        
-        
-        deleteVacancy: async (req, res) => {
-            const { id } = req.params;
-    
-            const sql = `DELETE FROM vacancies WHERE id = ?`;
-            const values = [id];
-    
-            try {
-                await query(sql, values);
-                res.json({ status: 'Success', message: 'Vacancy deleted successfully' });
-            } catch (error) {
-                console.error(error);
-                res.status(500).json({ status: 'Error', message: 'An error occurred while deleting a vacancy' });
             }
+          );
         }
       
 }
