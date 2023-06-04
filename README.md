@@ -432,7 +432,7 @@ Journey RestAPI
     }
     ```
 
-    * **[GET]** Get Latest Vacancy
+  * **[GET]** Get Latest Vacancy
   
     Additional Route: `<latest>`
     

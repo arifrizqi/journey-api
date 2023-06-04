@@ -7,7 +7,7 @@ const companiesRoute = require('./routes/companies-route');
 const vacanciesRoute = require('./routes/vacancies-route');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cors());
