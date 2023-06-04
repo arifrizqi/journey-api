@@ -67,9 +67,9 @@ Journey RestAPI
       "full_name": "John Doe",
       "email": "johndoe@example.com",
       "password": "password123",
-      "skill_one": "1",
-      "skill_two": "1",
-      "id_disability": "1",
+      "skill_one": 1,
+      "skill_two": 1,
+      "id_disability": 1,
       "address": "123 Main Street",
       "gender": "Male",
       "age": "30",
@@ -226,8 +226,8 @@ Journey RestAPI
       "province": "string",
       "logo": "file",
       "desc": "string",
-      "employees": "int",
-      "id_sector": "int",
+      "employees": int,
+      "id_sector": int,
       "email": "string",
       "password": "string"
     }
@@ -268,7 +268,7 @@ Journey RestAPI
         "placement_address": "string",
         "description": "string",
         "sector": "string",
-        "id_disability": "int",
+        "id_disability": int,
         "deadline_time": "date"
     }
     ```
@@ -293,8 +293,8 @@ Journey RestAPI
             {
                 "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
                 "placement_address": "Lowongan Programmer",
-                "description": "description",
-                "sector": "asda",
+                "description": "Lorem Ipsum dolor sit amet",
+                "sector": "Medicine",
                 "id_disability": "1",
                 "deadline_time": "2023-05-29T09:14:30.000Z",
                 "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
@@ -315,7 +315,7 @@ Journey RestAPI
         "placement_address": "string", 
         "description": "string",
         "sector": "string",
-        "id_disability": "int",
+        "id_disability": int,
         "deadline_time": "date"
     }
     ```
@@ -377,8 +377,8 @@ Journey RestAPI
             {
                 "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
                 "placement_address": "Lowongan Programmer",
-                "description": "description",
-                "sector": "asda",
+                "description": "Lorem Ipsum dolor sit amet",
+                "sector": "Medicine",
                 "created_at": "2023-06-01T07:59:04.938Z",
                 "updated_at": "2023-06-01T07:59:04.938Z",
                 "disability_name": "Blind",
@@ -399,14 +399,14 @@ Journey RestAPI
       "status": "Success",
       "vacancy": {
           "id": "dfe9725b-0e45-4732-8e29-7091e41574c4",
-          "placement_address": "string",
-          "description": "description",
-          "sector": "string",
+          "placement_address": "Lorem Ipsum dolor sit amet",
+          "description": "Lorem Ipsum dolor sit amet",
+          "sector": "Medicine",
           "created_at": "2023-05-31T10:12:45.820Z",
           "updated_at": "2023-05-31T10:12:45.820Z",
-          "disability_name": "string",
+          "disability_name": "Physical Disability",
           "deadline_time": "2023-05-29T09:14:30.000Z",
-          "company_name": "string"
+          "company_name": "PT Seribu"
         }
     }
     ```
@@ -423,16 +423,11 @@ Journey RestAPI
       "totalItems": 3,
       "results": [
             {
-                "id": "6258a8da-4da8-41f2-8df8-865e9d34e22b",
+                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
                 "placement_address": "Lowongan Programmer",
-                "description": "description",
-                "sector": "asda",
-                "id_disability": "1",
-                "deadline_time": "2023-05-29T09:14:30.000Z",
-                "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
-                "created_at": "2023-06-01T09:13:28.182Z",
-                "updated_at": "2023-06-01T09:13:28.182Z"
-            }
+                "description": "Lorem Ipsum dolor sit amet",
+                "total_applicants": 1
+            },
         ]
     }
     ```
@@ -449,11 +444,16 @@ Journey RestAPI
       "totalItems": 3,
       "results": [
             {
-                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
+                "id": "6258a8da-4da8-41f2-8df8-865e9d34e22b",
                 "placement_address": "Lowongan Programmer",
-                "description": "description",
-                "total_applicants": 1
-            },
+                "description": "Lorem Ipsum dolor sit amet",
+                "sector": "Medicine",
+                "id_disability": "1",
+                "deadline_time": "2023-05-29T09:14:30.000Z",
+                "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
+                "created_at": "2023-06-01T09:13:28.182Z",
+                "updated_at": "2023-06-01T09:13:28.182Z"
+            }
         ]
     }
     ```
