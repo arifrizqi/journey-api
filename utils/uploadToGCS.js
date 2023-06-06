@@ -1,7 +1,11 @@
 'use strict'
 require('dotenv').config()
-const {Storage} = require('@google-cloud/storage')
-const { v4: uuidv4 } = require('uuid');
+const {
+    Storage
+} = require('@google-cloud/storage')
+const {
+    v4: uuidv4
+} = require('uuid');
 const path = require('path');
 const pathKey = path.resolve('../key.json')
 const gcs = new Storage({
@@ -9,7 +13,7 @@ const gcs = new Storage({
     keyFilename: pathKey
 })
 
-const bucketName = process.env.BUCKET_NAME
+const bucketName = "journey-bangkit"
 const bucket = gcs.bucket(bucketName)
 
 function getPublicUrl(filename) {

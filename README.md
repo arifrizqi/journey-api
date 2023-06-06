@@ -19,7 +19,6 @@ Journey RestAPI
                 "id": "2c099275-9b08-48d5-88bd-23452962a6de",
                 "full_name": "toriq",
                 "email": "toriq@gmail.com",
-                "password": "$2b$10$HqsihjGTkM5BqyNJwgIBdOHUuabexzYuhSTUm/IxOrg5Yc1JSmOsm",
                 "address": "123 Main Street",
                 "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
                 "gender": "Male",
@@ -46,7 +45,6 @@ Journey RestAPI
             "id": "e75cb5a0-e855-47d3-aa30-8042bc6d9027",
             "full_name": "John Doe",
             "email": "johndoe@example.com",
-            "password": "$2b$10$iLxDOwX2fCUADhwgZimQnehvBRYYIITO4zmriLODUsaL2LjZKJnnm",
             "address": "123 Main Street",
             "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
             "gender": "Male",
@@ -158,7 +156,6 @@ Journey RestAPI
               "description": "string",
               "employees": 10,
               "email": "string",
-              "password": "$2b$10$/LoRNz3uJ0z3Yq5Mi9QE4Ofjaz7NUei/FkQU6zxajYW7.ktIdoPN.",
               "roleId": 2,
               "sector_name": "Kavling"
         }
@@ -184,7 +181,6 @@ Journey RestAPI
             "description": "string",
             "employees": 10,
             "email": "string",
-            "password": "$2b$10$/LoRNz3uJ0z3Yq5Mi9QE4Ofjaz7NUei/FkQU6zxajYW7.ktIdoPN.",
             "roleId": 2,
             "sector_name": "Kavling"
         }
@@ -199,10 +195,8 @@ Journey RestAPI
       "address": "string",
       "city": "string",
       "province": "string",
-      "logo": "file",
       "description": "string",
       "employees": int,
-      "sector": "string",
       "email": "string",
       "password": "string",
       "id_sector": int
@@ -281,27 +275,20 @@ Journey RestAPI
 
   * **[GET]** Get Vacancies Each Company
     
-      Additional Route: `<:companyId/vacancies>`
-
+    Additional Route: `<:companyId/vacancies>`
+    
     Response:
     ```
     {
-      "totalCount": 1,
-      "currentPage": 1,
-      "totalPages": 1,
-      "vacancies": [
-            {
-                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
-                "placement_address": "Lowongan Programmer",
-                "description": "Lorem Ipsum dolor sit amet",
-                "sector": "Medicine",
-                "id_disability": "1",
-                "deadline_time": "2023-05-29T09:14:30.000Z",
-                "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
-                "created_at": "2023-06-01T07:59:04.938Z",
-                "updated_at": "2023-06-01T07:59:04.938Z"
-            }
-        ]
+        "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
+        "placement_address": "Lowongan Programmer",
+        "description": "Lorem Impsum Dolor Sit Amet",
+        "created_at": "2023-06-06T12:32:16.961Z",
+        "updated_at": "2023-06-06T12:32:16.961Z",
+        "disability_name": "Physical Disability",
+        "deadline_time": "2023-05-29T09:14:30.000Z",
+        "company_name": "PT Dinamika",
+        "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
     }
     ```
 
@@ -344,19 +331,20 @@ Journey RestAPI
     Response:
     ```
     [
-        {
-            "id": "7f425468-44bc-4634-9230-34a919af1dd9",
-            "full_name": "Arif",
-            "email": "arif@gmail.com",
-            "skill_one": "1",
-            "skill_two": "1",
-            "address": "123 Main Street",
-            "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
-            "gender": "Male",
-            "age": "30",
-            "phone_number": "1234567890",
-            "applied_at": "2023-06-01T08:01:05.908Z"
-        }
+      {
+          "id": "43fcf8bd-0d95-4088-813b-cef893d1baad",
+          "full_name": "Arif Rizqi",
+          "email": "arif@gmail.com",
+          "address": "Serang",
+          "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
+          "gender": "male",
+          "age": "20",
+          "phone_number": "028594632394",
+          "applied_at": "2023-06-06T12:56:55.317Z",
+          "disability_name": "Mobility Impairment",
+          "skill_one_name": "SEO",
+          "skill_two_name": "Python"
+      }
     ]
     ```
 
@@ -368,22 +356,22 @@ Journey RestAPI
     Response:
     ```
     {
-    "status": "Success",
-    "page": 1,
-    "limit": 10,
-    "totalVacancies": 1,
-    "totalPages": 1,
-    "vacancies": [
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalVacancies": 1,
+      "totalPages": 1,
+      "vacancies": [
             {
-                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
+                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
                 "placement_address": "Lowongan Programmer",
-                "description": "Lorem Ipsum dolor sit amet",
-                "sector": "Medicine",
-                "created_at": "2023-06-01T07:59:04.938Z",
-                "updated_at": "2023-06-01T07:59:04.938Z",
-                "disability_name": "Blind",
+                "description": "Lorem Impsum Dolor Sit Amet",
+                "created_at": "2023-06-06T12:32:16.961Z",
+                "updated_at": "2023-06-06T12:32:16.961Z",
+                "disability_name": "Physical Disability",
                 "deadline_time": "2023-05-29T09:14:30.000Z",
-                "company_name": "PT Seribu"
+                "company_name": "PT Dinamika",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
         ]
     }
@@ -398,15 +386,15 @@ Journey RestAPI
     {
       "status": "Success",
       "vacancy": {
-          "id": "dfe9725b-0e45-4732-8e29-7091e41574c4",
-          "placement_address": "Lorem Ipsum dolor sit amet",
-          "description": "Lorem Ipsum dolor sit amet",
-          "sector": "Medicine",
-          "created_at": "2023-05-31T10:12:45.820Z",
-          "updated_at": "2023-05-31T10:12:45.820Z",
+          "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
+          "placement_address": "Lowongan Programmer",
+          "description": "Lorem Impsum Dolor Sit Amet",
+          "created_at": "2023-06-06T12:32:16.961Z",
+          "updated_at": "2023-06-06T12:32:16.961Z",
           "disability_name": "Physical Disability",
           "deadline_time": "2023-05-29T09:14:30.000Z",
-          "company_name": "PT Seribu"
+          "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+          "company_name": "PT Dinamika"
         }
     }
     ```
@@ -420,14 +408,20 @@ Journey RestAPI
     {
       "currentPage": 1,
       "totalPages": 1,
-      "totalItems": 3,
+      "totalItems": 1,
       "results": [
             {
-                "id": "88fe943c-3b65-49a9-b789-ff4b7bb10315",
+                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
                 "placement_address": "Lowongan Programmer",
-                "description": "Lorem Ipsum dolor sit amet",
+                "description": "Lorem Impsum Dolor Sit Amet",
+                "deadline_time": "2023-05-29T09:14:30.000Z",
+                "id_company": "5f6bd662-82a1-4c5e-af5c-b16477d86b81",
+                "created_at": "2023-06-06T12:32:16.961Z",
+                "updated_at": "2023-06-06T12:32:16.961Z",
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
                 "total_applicants": 1
-            },
+            }
         ]
     }
     ```
@@ -441,18 +435,18 @@ Journey RestAPI
     {
       "currentPage": 1,
       "totalPages": 1,
-      "totalItems": 3,
+      "totalItems": 1,
       "results": [
             {
-                "id": "6258a8da-4da8-41f2-8df8-865e9d34e22b",
+                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
                 "placement_address": "Lowongan Programmer",
-                "description": "Lorem Ipsum dolor sit amet",
-                "sector": "Medicine",
-                "id_disability": "1",
+                "description": "Lorem Impsum Dolor Sit Amet",
                 "deadline_time": "2023-05-29T09:14:30.000Z",
-                "id_company": "d57e489e-fe28-4479-b3a8-fa2460f543bb",
-                "created_at": "2023-06-01T09:13:28.182Z",
-                "updated_at": "2023-06-01T09:13:28.182Z"
+                "id_company": "5f6bd662-82a1-4c5e-af5c-b16477d86b81",
+                "created_at": "2023-06-06T12:32:16.961Z",
+                "updated_at": "2023-06-06T12:32:16.961Z",
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
         ]
     }
