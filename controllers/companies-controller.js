@@ -24,7 +24,6 @@ const companiesController = {
         const city = req.body.city;
         const province = req.body.province;
         var logo = 'https://storage.googleapis.com/journey-bangkit/company.png';
-        const description = req.body.description;
         const employees = req.body.employees;
         const id_sector = req.body.id_sector;
         const email = req.body.email;
@@ -56,7 +55,7 @@ const companiesController = {
         }
 
         const query =
-            "INSERT INTO companies (id, name, address, city, province, logo, description, employees, id_sector, email, password, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO companies (id, name, address, city, province, logo, employees, id_sector, email, password, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         db.query(
             query,
@@ -67,7 +66,6 @@ const companiesController = {
                 city,
                 province,
                 logo,
-                description,
                 employees,
                 id_sector,
                 email,
@@ -95,7 +93,6 @@ const companiesController = {
             address,
             city,
             province,
-            description,
             employees,
             id_sector,
             email,
@@ -119,8 +116,7 @@ const companiesController = {
       address = COALESCE(?, address), 
       city = COALESCE(?, city), 
       province = COALESCE(?, province), 
-      logo = COALESCE(?, logo), 
-      description = COALESCE(?, description), 
+      logo = COALESCE(?, logo),  
       employees = COALESCE(?, employees), 
       id_sector = COALESCE(?, id_sector), 
       email = COALESCE(?, email), 
@@ -133,7 +129,6 @@ const companiesController = {
             city,
             province,
             logo || null,
-            description,
             employees,
             id_sector,
             email,
@@ -166,7 +161,7 @@ const companiesController = {
             const totalCompanies = countResult[0].total;
 
             const sql = `
-        SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.description, companies.employees, companies.email, companies.roleId, company_sector.name AS sector_name
+        SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.employees, companies.email, companies.roleId, company_sector.name AS sector_name
         FROM companies
         INNER JOIN company_sector ON companies.id_sector = company_sector.id
         LIMIT ?, ?
@@ -207,7 +202,7 @@ const companiesController = {
             id
         } = req.params;
 
-        const sql = `SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.description, companies.employees, companies.email, companies.roleId, company_sector.name AS sector_name
+        const sql = `SELECT companies.id, companies.name, companies.address, companies.city, companies.province, companies.logo, companies.employees, companies.email, companies.roleId, company_sector.name AS sector_name
     FROM companies
     INNER JOIN company_sector ON companies.id_sector = company_sector.id WHERE companies.id = ?`;
         const values = [id];
