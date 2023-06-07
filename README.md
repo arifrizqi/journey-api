@@ -398,7 +398,8 @@ Journey RestAPI
                 "deadline_time": "2023-07-03T09:14:30.000Z",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
-                "disability_name": "Physical Disability"
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
         ]
     }
@@ -421,7 +422,8 @@ Journey RestAPI
             "deadline_time": "2023-07-03T09:14:30.000Z",
             "skill_one_name": "Python",
             "skill_two_name": "Adobe Photoshop",
-            "disability_name": "Physical Disability"
+            "disability_name": "Physical Disability",
+            "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
         }
     }
     ```

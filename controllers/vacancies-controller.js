@@ -28,9 +28,11 @@ const vacanciesController = {
             vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
-            disability.name AS disability_name
+            disability.name AS disability_name,
+            companies.logo AS company_logo
         FROM 
             vacancies
+        INNER JOIN companies ON vacancies.id_company = companies.id
         INNER JOIN 
             skils AS skil_one ON vacancies.skill_one = skil_one.id
         INNER JOIN 
@@ -78,9 +80,11 @@ const vacanciesController = {
         vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
         skil_one.name AS skill_one_name,
         skil_two.name AS skill_two_name,
-        disability.name AS disability_name
+        disability.name AS disability_name,
+        companies.logo AS company_logo
     FROM 
         vacancies
+    INNER JOIN companies ON vacancies.id_company = companies.id
     INNER JOIN 
         skils AS skil_one ON vacancies.skill_one = skil_one.id
     INNER JOIN 
