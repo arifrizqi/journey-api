@@ -24,11 +24,19 @@ const vacanciesController = {
             const countResult = await query(countSql);
             const totalVacancies = countResult[0].total;
 
-            const sql = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at,
-                       disability.name AS disability_name, vacancies.deadline_time, companies.name AS company_name, companies.logo AS company_logo
-                       FROM vacancies
-                       INNER JOIN disability ON vacancies.id_disability = disability.id
-                       INNER JOIN companies ON vacancies.id_company = companies.id
+            const sql = `SELECT 
+            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
+            skil_one.name AS skill_one_name,
+            skil_two.name AS skill_two_name,
+            disability.name AS disability_name
+        FROM 
+            vacancies
+        INNER JOIN 
+            skils AS skil_one ON vacancies.skill_one = skil_one.id
+        INNER JOIN 
+            skils AS skil_two ON vacancies.skill_two = skil_two.id
+        INNER JOIN 
+            disability ON vacancies.id_disability = disability.id
                        LIMIT ?, ?`;
 
             const values = [startIndex, parseInt(limit)];
@@ -66,11 +74,20 @@ const vacanciesController = {
             id
         } = req.params;
 
-        const sql = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at,
-        disability.name AS disability_name, vacancies.deadline_time,companies.logo AS company_logo, companies.name AS company_name
-        FROM vacancies
-        INNER JOIN disability ON vacancies.id_disability = disability.id
-        INNER JOIN companies ON vacancies.id_company = companies.id WHERE vacancies.id = ?`;
+        const sql = `SELECT 
+        vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
+        skil_one.name AS skill_one_name,
+        skil_two.name AS skill_two_name,
+        disability.name AS disability_name
+    FROM 
+        vacancies
+    INNER JOIN 
+        skils AS skil_one ON vacancies.skill_one = skil_one.id
+    INNER JOIN 
+        skils AS skil_two ON vacancies.skill_two = skil_two.id
+    INNER JOIN 
+        disability ON vacancies.id_disability = disability.id
+    WHERE vacancies.id = ?`;
         const values = [id];
 
         db.query(sql, values, (err, result) => {
@@ -108,11 +125,13 @@ const vacanciesController = {
 
         const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
         const query = `
-            SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, companies.logo AS company_logo, COUNT(job_apply.id_user) AS total_applicants 
+            SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo, COUNT(job_apply.id_user) AS total_applicants 
             FROM vacancies 
             LEFT JOIN job_apply ON vacancies.id = job_apply.id_vacancy
             JOIN disability ON vacancies.id_disability = disability.id 
             INNER JOIN companies ON vacancies.id_company = companies.id
+            INNER JOIN skils AS skil_one ON vacancies.skill_one = skil_one.id
+            INNER JOIN skils AS skil_two ON vacancies.skill_two = skil_two.id
             GROUP BY vacancies.id 
             ORDER BY total_applicants DESC 
             LIMIT ?, ?
@@ -156,10 +175,12 @@ const vacanciesController = {
         const startIndex = (currentPage - 1) * itemsPerPage;
 
         const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
-        const query = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, companies.logo AS company_logo
+        const query = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo
           FROM vacancies 
           JOIN disability ON vacancies.id_disability = disability.id 
           INNER JOIN companies ON vacancies.id_company = companies.id
+          INNER JOIN skils AS skil_one ON vacancies.skill_one = skil_one.id
+          INNER JOIN skils AS skil_two ON vacancies.skill_two = skil_two.id
           ORDER BY created_at DESC LIMIT ?, ?`;
 
         db.query(totalCountQuery, (err, countResult) => {

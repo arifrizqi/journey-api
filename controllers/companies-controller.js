@@ -261,6 +261,8 @@ const companiesController = {
             placement_address,
             description,
             id_disability,
+            skill_one,
+            skill_two,
             deadline_time,
         } = req.body;
 
@@ -269,6 +271,8 @@ const companiesController = {
             placement_address,
             description,
             id_disability,
+            skill_one,
+            skill_two,
             deadline_time,
             id_company: companyId,
         };
@@ -298,7 +302,24 @@ const companiesController = {
 
         try {
             const countQuery = 'SELECT COUNT(*) as totalCount FROM vacancies WHERE id_company = ?';
-            const vacanciesQuery = 'SELECT * FROM vacancies WHERE id_company = ? LIMIT ?, ?';
+            const vacanciesQuery = `SELECT 
+            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
+            skil_one.name AS skill_one_name,
+            skil_two.name AS skill_two_name,
+            disability.name AS disability_name,
+            companies.logo AS company_logo
+        FROM 
+            vacancies
+            INNER JOIN companies ON vacancies.id_company = companies.id
+        INNER JOIN 
+            skils AS skil_one ON vacancies.skill_one = skil_one.id
+        INNER JOIN 
+            skils AS skil_two ON vacancies.skill_two = skil_two.id
+        INNER JOIN 
+            disability ON vacancies.id_disability = disability.id
+        WHERE 
+            vacancies.id_company = ?
+        LIMIT ?, ?`;
 
             // Menghitung total jumlah lowongan kerja
             const totalCount = await new Promise((resolve, reject) => {
@@ -347,8 +368,23 @@ const companiesController = {
         } = req.params;
 
         db.query(
-            `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, vacancies.deadline_time, companies.name AS company_name, companies.logo AS company_logo FROM vacancies INNER JOIN disability ON vacancies.id_disability = disability.id
-          INNER JOIN companies ON vacancies.id_company = companies.id WHERE id_company = ? AND vacancies.id = ?`,
+            `SELECT 
+            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, 
+            skil_one.name AS skill_one_name,
+            skil_two.name AS skill_two_name,
+            disability.name AS disability_name,
+            companies.logo AS company_logo
+        FROM 
+            vacancies
+            
+          INNER JOIN companies ON vacancies.id_company = companies.id
+        INNER JOIN 
+            skils AS skil_one ON vacancies.skill_one = skil_one.id
+        INNER JOIN 
+            skils AS skil_two ON vacancies.skill_two = skil_two.id
+        INNER JOIN 
+            disability ON vacancies.id_disability = disability.id
+        WHERE id_company = ? AND vacancies.id = ?`,
             [companyId, vacancyId],
             (err, results) => {
                 if (err) {

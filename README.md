@@ -269,22 +269,50 @@ Journey RestAPI
         "message": "Vacancy created successfully"
     }
     ```
-
-  * **[GET]** Get Vacancies Each Company
+  
+  * **[GET]** Get All Vacancies in Company
     
     Additional Route: `<:companyId/vacancies>`
     
     Response:
     ```
     {
-        "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
-        "placement_address": "Lowongan Programmer",
-        "description": "Lorem Impsum Dolor Sit Amet",
-        "created_at": "2023-06-06T12:32:16.961Z",
-        "updated_at": "2023-06-06T12:32:16.961Z",
+      "totalCount": 1,
+      "currentPage": 1,
+      "totalPages": 1,
+      "vacancies": [
+            {
+                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "placement_address": "Copywriter",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "created_at": "2023-06-07T14:08:40.019Z",
+                "updated_at": "2023-06-07T14:08:40.019Z",
+                "deadline_time": "2023-07-03T09:14:30.000Z",
+                "skill_one_name": "Python",
+                "skill_two_name": "Adobe Photoshop",
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+            }
+        ]
+    }
+    ```
+
+  * **[GET]** Get Vacancies Each Company
+    
+    Additional Route: `<:companyId/vacancies/:vacancyId>`
+    
+    Response:
+    ```
+    {
+        "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+        "placement_address": "Copywriter",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+        "created_at": "2023-06-07T14:08:40.019Z",
+        "updated_at": "2023-06-07T14:08:40.019Z",
+        "deadline_time": "2023-07-03T09:14:30.000Z",
+        "skill_one_name": "Python",
+        "skill_two_name": "Adobe Photoshop",
         "disability_name": "Physical Disability",
-        "deadline_time": "2023-05-29T09:14:30.000Z",
-        "company_name": "PT Dinamika",
         "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
     }
     ```
@@ -360,15 +388,15 @@ Journey RestAPI
       "totalPages": 1,
       "vacancies": [
             {
-                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
-                "placement_address": "Lowongan Programmer",
-                "description": "Lorem Impsum Dolor Sit Amet",
-                "created_at": "2023-06-06T12:32:16.961Z",
-                "updated_at": "2023-06-06T12:32:16.961Z",
-                "disability_name": "Physical Disability",
-                "deadline_time": "2023-05-29T09:14:30.000Z",
-                "company_name": "PT Dinamika",
-                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "placement_address": "Copywriter",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "created_at": "2023-06-07T14:08:40.019Z",
+                "updated_at": "2023-06-07T14:08:40.019Z",
+                "deadline_time": "2023-07-03T09:14:30.000Z",
+                "skill_one_name": "Python",
+                "skill_two_name": "Adobe Photoshop",
+                "disability_name": "Physical Disability"
             }
         ]
     }
@@ -383,15 +411,15 @@ Journey RestAPI
     {
       "status": "Success",
       "vacancy": {
-          "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
-          "placement_address": "Lowongan Programmer",
-          "description": "Lorem Impsum Dolor Sit Amet",
-          "created_at": "2023-06-06T12:32:16.961Z",
-          "updated_at": "2023-06-06T12:32:16.961Z",
-          "disability_name": "Physical Disability",
-          "deadline_time": "2023-05-29T09:14:30.000Z",
-          "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
-          "company_name": "PT Dinamika"
+            "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+            "placement_address": "Copywriter",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+            "created_at": "2023-06-07T14:08:40.019Z",
+            "updated_at": "2023-06-07T14:08:40.019Z",
+            "deadline_time": "2023-07-03T09:14:30.000Z",
+            "skill_one_name": "Python",
+            "skill_two_name": "Adobe Photoshop",
+            "disability_name": "Physical Disability"
         }
     }
     ```
@@ -408,16 +436,18 @@ Journey RestAPI
       "totalItems": 1,
       "results": [
             {
-                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
-                "placement_address": "Lowongan Programmer",
-                "description": "Lorem Impsum Dolor Sit Amet",
-                "deadline_time": "2023-05-29T09:14:30.000Z",
-                "id_company": "5f6bd662-82a1-4c5e-af5c-b16477d86b81",
-                "created_at": "2023-06-06T12:32:16.961Z",
-                "updated_at": "2023-06-06T12:32:16.961Z",
+                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "placement_address": "Copywriter",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "deadline_time": "2023-07-03T09:14:30.000Z",
+                "id_company": "a8db0da9-7bde-4d75-bf76-ae890cc8ac89",
+                "created_at": "2023-06-07T14:08:40.019Z",
+                "updated_at": "2023-06-07T14:08:40.019Z",
                 "disability_name": "Physical Disability",
+                "skill_one_name": "Python",
+                "skill_two_name": "Adobe Photoshop",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
-                "total_applicants": 1
+                "total_applicants": 0
             }
         ]
     }
@@ -435,14 +465,16 @@ Journey RestAPI
       "totalItems": 1,
       "results": [
             {
-                "id": "25f9a4af-d60b-46cd-bebe-a102c9ac91a7",
-                "placement_address": "Lowongan Programmer",
-                "description": "Lorem Impsum Dolor Sit Amet",
-                "deadline_time": "2023-05-29T09:14:30.000Z",
-                "id_company": "5f6bd662-82a1-4c5e-af5c-b16477d86b81",
-                "created_at": "2023-06-06T12:32:16.961Z",
-                "updated_at": "2023-06-06T12:32:16.961Z",
+                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "placement_address": "Copywriter",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "deadline_time": "2023-07-03T09:14:30.000Z",
+                "id_company": "a8db0da9-7bde-4d75-bf76-ae890cc8ac89",
+                "created_at": "2023-06-07T14:08:40.019Z",
+                "updated_at": "2023-06-07T14:08:40.019Z",
                 "disability_name": "Physical Disability",
+                "skill_one_name": "Python",
+                "skill_two_name": "Adobe Photoshop",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
         ]
