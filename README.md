@@ -260,6 +260,8 @@ Journey RestAPI
         "description": "string",
         "sector": "string",
         "id_disability": int,
+        "skill_one": "string",
+        "skill_two": "string",
         "deadline_time": "date"
     }
     ```
