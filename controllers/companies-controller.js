@@ -55,7 +55,7 @@ const companiesController = {
         }
 
         const query =
-            "INSERT INTO companies (id, name, address, city, province, logo, employees, id_sector, email, password, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO companies (id, name, address, city, province, logo, employees, id_sector, email, password, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         db.query(
             query,
