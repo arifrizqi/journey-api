@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const bcrypt = require('bcrypt');
+const moment = require('moment-timezone');
 const {
     v4: uuidv4
 } = require('uuid');
@@ -102,6 +103,12 @@ const companiesController = {
         // Periksa apakah ada file gambar yang diunggah
         let logo = '';
         if (req.file && req.file.cloudStoragePublicUrl) {
+            // Validasi tipe file apakah gambar atau bukan
+            if (!req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({
+                error: 'Only image files are allowed'
+            });
+            }
             logo = req.file.cloudStoragePublicUrl;
         }
 
@@ -264,6 +271,7 @@ const companiesController = {
             skill_one,
             skill_two,
             deadline_time,
+            job_type,
         } = req.body;
 
         const vacancy = {
@@ -274,6 +282,7 @@ const companiesController = {
             skill_one,
             skill_two,
             deadline_time,
+            job_type,
             id_company: companyId,
         };
 
@@ -303,7 +312,7 @@ const companiesController = {
         try {
             const countQuery = 'SELECT COUNT(*) as totalCount FROM vacancies WHERE id_company = ?';
             const vacanciesQuery = `SELECT 
-            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time,
+            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type,
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
             disability.name AS disability_name,
@@ -369,7 +378,7 @@ const companiesController = {
 
         db.query(
             `SELECT 
-            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, 
+            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type, 
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
             disability.name AS disability_name,
@@ -413,9 +422,11 @@ const companiesController = {
         const {
             placement_address,
             description,
-            sector,
             id_disability,
-            deadline_time
+            skill_one,
+            skill_two,
+            deadline_time,
+            job_type
         } = req.body;
 
         const updatedVacancy = {};
@@ -426,15 +437,23 @@ const companiesController = {
         if (description) {
             updatedVacancy.description = description;
         }
-        if (sector) {
-            updatedVacancy.sector = sector;
+        if (skill_one) {
+            updatedVacancy.skill_one = skill_one;
+        }
+        if (skill_two) {
+            updatedVacancy.skill_two = skill_two;
         }
         if (id_disability) {
             updatedVacancy.id_disability = id_disability;
         }
+        if (job_type) {
+            updatedVacancy.job_type = job_type;
+        }
         if (deadline_time) {
             updatedVacancy.deadline_time = deadline_time;
         }
+
+        updatedVacancy.updated_at = moment().tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
 
         db.query(
             'UPDATE vacancies SET ? WHERE id_company = ? AND id = ?',

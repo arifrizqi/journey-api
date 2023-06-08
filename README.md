@@ -258,10 +258,10 @@ Journey RestAPI
     {
         "placement_address": "string",
         "description": "string",
-        "sector": "string",
         "id_disability": int,
         "skill_one": "string",
         "skill_two": "string",
+        "job_type": int,
         "deadline_time": "date"
     }
     ```
@@ -292,6 +292,7 @@ Journey RestAPI
                 "deadline_time": "2023-07-03T09:14:30.000Z",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
+                "job_type": 2,
                 "disability_name": "Physical Disability",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
@@ -314,6 +315,7 @@ Journey RestAPI
         "deadline_time": "2023-07-03T09:14:30.000Z",
         "skill_one_name": "Python",
         "skill_two_name": "Adobe Photoshop",
+        "job_type": 2,
         "disability_name": "Physical Disability",
         "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
     }
@@ -328,8 +330,10 @@ Journey RestAPI
     {
         "placement_address": "string", 
         "description": "string",
-        "sector": "string",
+        "skill_one": "string",
+        "skill_two": "string",
         "id_disability": int,
+        "job_type": 2,
         "deadline_time": "date"
     }
     ```
@@ -398,6 +402,7 @@ Journey RestAPI
                 "deadline_time": "2023-07-03T09:14:30.000Z",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
+                "job_type": 2,
                 "disability_name": "Physical Disability",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
@@ -422,6 +427,7 @@ Journey RestAPI
             "deadline_time": "2023-07-03T09:14:30.000Z",
             "skill_one_name": "Python",
             "skill_two_name": "Adobe Photoshop",
+            "job_type": 2,
             "disability_name": "Physical Disability",
             "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
         }
@@ -450,6 +456,7 @@ Journey RestAPI
                 "disability_name": "Physical Disability",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
+                "job_type": 2,
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
                 "total_applicants": 0
             }
@@ -479,6 +486,7 @@ Journey RestAPI
                 "disability_name": "Physical Disability",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
+                "job_type": 2,
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
             }
         ]

@@ -185,6 +185,12 @@ const usersController = {
         // Periksa apakah ada file gambar yang diunggah
         let profile_photo_url = '';
         if (req.file && req.file.cloudStoragePublicUrl) {
+            // Validasi tipe file apakah gambar atau bukan
+            if (!req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({
+                error: 'Only image files are allowed'
+            });
+            }
             profile_photo_url = req.file.cloudStoragePublicUrl;
         }
 

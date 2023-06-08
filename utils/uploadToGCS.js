@@ -20,15 +20,27 @@ function getPublicUrl(filename) {
 
 const ImgUpload = {};
 
+const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
 ImgUpload.uploadToGcs = (req, res, next) => {
   if (!req.file) return next();
+
   const originalExtension = path.extname(req.file.originalname);
+  const mimeType = req.file.mimetype;
+
+  // Memeriksa apakah tipe file diizinkan
+  if (!allowedImageTypes.includes(mimeType)) {
+    return res.status(400).json({
+      error: 'Only JPEG, PNG, and JPG images are allowed'
+    });
+  }
+
   const gcsname = `${uuidv4()}${originalExtension}`;
   const file = bucket.file(gcsname);
 
   const stream = file.createWriteStream({
     metadata: {
-      contentType: req.file.mimetype
+      contentType: mimeType
     }
   });
 
