@@ -1,6 +1,7 @@
 const db = require('../database/db');
 const bcrypt = require('bcrypt');
 const moment = require('moment-timezone');
+const jwt = require('jsonwebtoken');
 const {
     v4: uuidv4
 } = require('uuid');
@@ -105,9 +106,9 @@ const companiesController = {
         if (req.file && req.file.cloudStoragePublicUrl) {
             // Validasi tipe file apakah gambar atau bukan
             if (!req.file.mimetype.startsWith('image/')) {
-            return res.status(400).json({
-                error: 'Only image files are allowed'
-            });
+                return res.status(400).json({
+                    error: 'Only image files are allowed'
+                });
             }
             logo = req.file.cloudStoragePublicUrl;
         }
@@ -535,6 +536,87 @@ const companiesController = {
                 }
             }
         );
+    },
+
+    login: async (req, res) => {
+        const { email, password } = req.body;
+
+        // Check if user exists
+        const checkEmailQuery = `SELECT * FROM companies WHERE email = ?`;
+        const checkEmailValues = [email];
+
+        try {
+            const result = await query(checkEmailQuery, checkEmailValues);
+
+            if (result.length === 0) {
+                res.status(401).json({ status: 'Error', message: 'Invalid email or password' });
+            } else {
+                const companie = result[0];
+
+                // Compare passwords
+                const passwordMatch = await bcrypt.compare(password, companie.password);
+
+                if (!passwordMatch) {
+                    res.status(401).json({ status: 'Error', message: 'Invalid email or password' });
+                } else {
+                    // Generate JWT token
+                    const token = jwt.sign({ id: companie.id, email: companie.email }, 'secret_key');
+
+                    const checkTokenQuery = `SELECT * FROM company_tokens WHERE id_company = ?`;
+                    const checkTokenValues = [companie.id];
+
+                    const existingTokenResult = await query(checkTokenQuery, checkTokenValues);
+
+                    if (existingTokenResult.length > 0) {
+                        // Token already exists, update the existing token
+                        const updateTokenQuery = `UPDATE company_tokens SET tokens = ? WHERE id_company = ?`;
+                        const updateTokenValues = [token, companie.id];
+
+                        await query(updateTokenQuery, updateTokenValues);
+                    } else {
+                        // Token doesn't exist, create a new token
+                        const insertTokenQuery = `INSERT INTO company_tokens (id_company, tokens) VALUES (?, ?)`;
+                        const insertTokenValues = [companie.id, token];
+
+                        await query(insertTokenQuery, insertTokenValues);
+                    }
+
+                    // Set the userId in the request object
+                    req.companyId = companie.id;
+
+                    // Add user ID to the response
+                    res.json({ status: 'Success', id_company: companie.id, roleId: 2, token });
+                }
+
+
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'Error', message: 'An error occurred during login' });
+        }
+    },
+
+    authorize: (req, res, next) => {
+        const token = req.headers.authorization;
+
+        if (!token) {
+            res.status(401).json({ status: 'Error', message: 'Token not provided' });
+            return;
+        }
+
+        // Query the database to retrieve the user associated with the token
+        db.query('SELECT id_company FROM company_tokens WHERE tokens = ?', [token], (err, results) => {
+            if (err || results.length === 0) {
+                res.status(401).json({ status: 'Error', message: 'Invalid token' });
+            } else {
+                const companieId = results[0].id_company;
+
+                // Add the userId to the request object
+                req.companyId = companieId;
+
+                next();
+            }
+        });
     }
 
 

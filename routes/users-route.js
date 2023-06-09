@@ -5,11 +5,14 @@ const router = express.Router();
 
 const usersController = require('../controllers/users-contoller');
 
-router.get('/', usersController.getAllUsers);
-router.get('/:id', usersController.getUserById);
+router.post('/login', usersController.login);
+
+router.get('/', usersController.authorize, usersController.getAllUsers);
+router.get('/:id', usersController.authorize, usersController.getUserById);
 router.post('/', multer.single('profile_photo_url'), imgUpload.uploadToGcs, usersController.addUser);
-router.post('/:userId/apply/:vacancyId', usersController.applyJob);
-router.put('/:id', multer.single('profile_photo_url'), imgUpload.uploadToGcs, usersController.updateUser);
-router.delete('/:id', usersController.deleteUser);
+router.put('/:id', usersController.authorize, usersController.updateUser);
+router.delete('/:id', usersController.authorize, usersController.deleteUser);
+router.post('/:userId/apply/:vacancyId', usersController.authorize, usersController.applyJob);
+
 
 module.exports = router;

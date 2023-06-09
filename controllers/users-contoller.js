@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const {
     v4: uuidv4
 } = require('uuid');
@@ -187,9 +188,9 @@ const usersController = {
         if (req.file && req.file.cloudStoragePublicUrl) {
             // Validasi tipe file apakah gambar atau bukan
             if (!req.file.mimetype.startsWith('image/')) {
-            return res.status(400).json({
-                error: 'Only image files are allowed'
-            });
+                return res.status(400).json({
+                    error: 'Only image files are allowed'
+                });
             }
             profile_photo_url = req.file.cloudStoragePublicUrl;
         }
@@ -306,6 +307,90 @@ const usersController = {
             }
         });
     },
+
+    login: async (req, res) => {
+        const { email, password } = req.body;
+
+        // Check if user exists
+        const checkEmailQuery = `SELECT * FROM users WHERE email = ?`;
+        const checkEmailValues = [email];
+
+        try {
+            const result = await query(checkEmailQuery, checkEmailValues);
+
+            if (result.length === 0) {
+                res.status(401).json({ status: 'Error', message: 'Invalid email or password' });
+            } else {
+                const user = result[0];
+
+                // Compare passwords
+                const passwordMatch = await bcrypt.compare(password, user.password);
+
+                if (!passwordMatch) {
+                    res.status(401).json({ status: 'Error', message: 'Invalid email or password' });
+                } else {
+                    // Generate JWT token
+                    const token = jwt.sign({ id: user.id, email: user.email }, 'secret_key');
+
+                    const checkTokenQuery = `SELECT * FROM user_tokens WHERE id_user = ?`;
+                    const checkTokenValues = [user.id];
+
+                    const existingTokenResult = await query(checkTokenQuery, checkTokenValues);
+
+                    if (existingTokenResult.length > 0) {
+                        // Token already exists, update the existing token
+                        const updateTokenQuery = `UPDATE user_tokens SET tokens = ? WHERE id_user = ?`;
+                        const updateTokenValues = [token, user.id];
+
+                        await query(updateTokenQuery, updateTokenValues);
+                    } else {
+                        // Token doesn't exist, create a new token
+                        const insertTokenQuery = `INSERT INTO user_tokens (id_user, tokens) VALUES (?, ?)`;
+                        const insertTokenValues = [user.id, token];
+
+                        await query(insertTokenQuery, insertTokenValues);
+                    }
+
+                    // Set the userId in the request object
+                    req.userId = user.id;
+
+                    // Add user ID to the response
+                    res.json({ status: 'Success', id_user: user.id, roleId: 1, token });
+                }
+
+
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'Error', message: 'An error occurred during login' });
+        }
+    },
+
+    authorize: (req, res, next) => {
+        const token = req.headers.authorization;
+
+        if (!token) {
+            res.status(401).json({ status: 'Error', message: 'Token not provided' });
+            return;
+        }
+
+        // Query the database to retrieve the user associated with the token
+        db.query('SELECT id_user FROM user_tokens WHERE tokens = ?', [token], (err, results) => {
+            if (err || results.length === 0) {
+                res.status(401).json({ status: 'Error', message: 'Invalid token' });
+            } else {
+                const userId = results[0].id_user;
+
+                // Add the userId to the request object
+                req.userId = userId;
+
+                next();
+            }
+        });
+    }
+
+
+
 }
 
 module.exports = usersController;
