@@ -317,10 +317,13 @@ const companiesController = {
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
             disability.name AS disability_name,
-            companies.logo AS company_logo
+            companies.logo AS company_logo,
+            companies.name AS company_name,
+            company_sector.name AS sector_name
         FROM 
             vacancies
             INNER JOIN companies ON vacancies.id_company = companies.id
+            INNER JOIN company_sector ON companies.id_sector = company_sector.id
         INNER JOIN 
             skils AS skil_one ON vacancies.skill_one = skil_one.id
         INNER JOIN 
@@ -383,11 +386,14 @@ const companiesController = {
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
             disability.name AS disability_name,
-            companies.logo AS company_logo
+            companies.logo AS company_logo,
+            companies.name AS company_name,
+            company_sector.name AS sector_name
         FROM 
             vacancies
             
           INNER JOIN companies ON vacancies.id_company = companies.id
+          INNER JOIN company_sector ON companies.id_sector = company_sector.id
         INNER JOIN 
             skils AS skil_one ON vacancies.skill_one = skil_one.id
         INNER JOIN 

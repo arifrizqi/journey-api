@@ -29,10 +29,13 @@ const vacanciesController = {
             skil_one.name AS skill_one_name,
             skil_two.name AS skill_two_name,
             disability.name AS disability_name,
-            companies.logo AS company_logo
+            companies.logo AS company_logo,
+            companies.name AS company_name,
+            company_sector.name AS sector_name
         FROM 
             vacancies
         INNER JOIN companies ON vacancies.id_company = companies.id
+        INNER JOIN company_sector ON companies.id_sector = company_sector.id
         INNER JOIN 
             skils AS skil_one ON vacancies.skill_one = skil_one.id
         INNER JOIN 
@@ -81,10 +84,13 @@ const vacanciesController = {
         skil_one.name AS skill_one_name,
         skil_two.name AS skill_two_name,
         disability.name AS disability_name,
-        companies.logo AS company_logo
+        companies.logo AS company_logo,
+        companies.name AS company_name,
+        company_sector.name AS sector_name
     FROM 
         vacancies
     INNER JOIN companies ON vacancies.id_company = companies.id
+    INNER JOIN company_sector ON companies.id_sector = company_sector.id
     INNER JOIN 
         skils AS skil_one ON vacancies.skill_one = skil_one.id
     INNER JOIN 
@@ -129,11 +135,12 @@ const vacanciesController = {
 
         const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
         const query = `
-            SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.job_type, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo, COUNT(job_apply.id_user) AS total_applicants 
+            SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.job_type, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo, companies.name AS company_name, company_sector.name AS sector_name, COUNT(job_apply.id_user) AS total_applicants 
             FROM vacancies 
             LEFT JOIN job_apply ON vacancies.id = job_apply.id_vacancy
             JOIN disability ON vacancies.id_disability = disability.id 
             INNER JOIN companies ON vacancies.id_company = companies.id
+            INNER JOIN company_sector ON companies.id_sector = company_sector.id
             INNER JOIN skils AS skil_one ON vacancies.skill_one = skil_one.id
             INNER JOIN skils AS skil_two ON vacancies.skill_two = skil_two.id
             GROUP BY vacancies.id 
@@ -179,10 +186,11 @@ const vacanciesController = {
         const startIndex = (currentPage - 1) * itemsPerPage;
 
         const totalCountQuery = 'SELECT COUNT(*) as total FROM vacancies';
-        const query = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.job_type, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo
+        const query = `SELECT vacancies.id, vacancies.placement_address, vacancies.description, vacancies.deadline_time, vacancies.job_type, vacancies.id_company, vacancies.created_at, vacancies.updated_at, disability.name AS disability_name, skil_one.name AS skill_one_name, skil_two.name AS skill_two_name, skil_two.name AS skill_two_name, companies.logo AS company_logo, companies.name AS company_name, company_sector.name AS sector_name
           FROM vacancies 
           JOIN disability ON vacancies.id_disability = disability.id 
           INNER JOIN companies ON vacancies.id_company = companies.id
+          INNER JOIN company_sector ON companies.id_sector = company_sector.id
           INNER JOIN skils AS skil_one ON vacancies.skill_one = skil_one.id
           INNER JOIN skils AS skil_two ON vacancies.skill_two = skil_two.id
           ORDER BY created_at DESC LIMIT ?, ?`;
