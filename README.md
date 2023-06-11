@@ -57,6 +57,28 @@ Journey RestAPI
         }
     }
     ```
+
+  * **[POST]** User Login
+
+    Additional Route: `<login>`
+
+    Request: 
+    ```
+    {
+      "email": "johndoe@example.com",
+      "password": "password123"
+    }
+    ```
+    Response:
+    ```
+    {
+      "status": "Success",
+      "id_company": "0c6bba3f-3f92-4c6d-bec1-619c2dfd37a9",
+      "roleId": 1,
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBjNmJiYWFmLTNmOTItNGM2ZC1iZWMxLTYxOWMyZGZkMzdhOSIsImVtYWlsIjoiaHJkQERhdGFTb2x1dGlvbnMuY29tIiwiaWF0IjoxNjg2NDUwNDQwfQ.0ZI-M7F6Ns09-GgFgyGpY70xSHqPINknMxfBvcL7kPg"
+    }
+    ```
+
   * **[POST]** Add New User 
 
     Request: 
@@ -184,6 +206,27 @@ Journey RestAPI
         }
       }
     ```
+  * **[POST]** Company Login
+
+    Additional Route: `<login>`
+    
+    Request: 
+    ```
+    {
+      "email": "hrd@company.com",
+      "password": "Password123"
+    }
+    ```
+    Response:
+    ```
+    {
+      "status": "Success",
+      "id_company": "0c6bbaaf-3f92-4c6d-bec1-619c2dfd37a9",
+      "roleId": 2,
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBjNmJiYWFmLTNmOTItNGM2ZC1iZWMxLTYxOWMyZGZkMzdhOSIsImVtYWlsIjoiaHJkQERhdGFTb2x1dGlvbnMuY29tIiwiaWF0IjoxNjg2NDUwNDQwfQ.0ZI-M7F6Ns09-GgFgyGpY70xSHqPINknMxfBvcL7kPg"
+    }
+    ```
+
   * **[POST]** Add New Company 
 
     Request: 
@@ -294,7 +337,9 @@ Journey RestAPI
                 "skill_two_name": "Adobe Photoshop",
                 "job_type": 2,
                 "disability_name": "Physical Disability",
-                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure"
             }
         ]
     }
@@ -317,7 +362,9 @@ Journey RestAPI
         "skill_two_name": "Adobe Photoshop",
         "job_type": 2,
         "disability_name": "Physical Disability",
-        "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+        "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+        "company_name": "PT Agile Solutions",
+        "sector_name": "Infrastructure"
     }
     ```
 
@@ -404,7 +451,9 @@ Journey RestAPI
                 "skill_two_name": "Adobe Photoshop",
                 "job_type": 2,
                 "disability_name": "Physical Disability",
-                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure"
             }
         ]
     }
@@ -429,7 +478,9 @@ Journey RestAPI
             "skill_two_name": "Adobe Photoshop",
             "job_type": 2,
             "disability_name": "Physical Disability",
-            "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+            "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+            "company_name": "PT Agile Solutions",
+            "sector_name": "Infrastructure"
         }
     }
     ```
@@ -458,6 +509,8 @@ Journey RestAPI
                 "skill_two_name": "Adobe Photoshop",
                 "job_type": 2,
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure",
                 "total_applicants": 0
             }
         ]
@@ -487,7 +540,9 @@ Journey RestAPI
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
                 "job_type": 2,
-                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png"
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure"
             }
         ]
     }
