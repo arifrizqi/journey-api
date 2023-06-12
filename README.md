@@ -7,7 +7,7 @@ Journey RestAPI
   * **[GET]** Get All Users
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
@@ -38,7 +38,7 @@ Journey RestAPI
     Additional Route: `<:id>`
 
     Response:
-    ```
+    ```json
     {
     "status": "Success",
     "user": {
@@ -63,14 +63,14 @@ Journey RestAPI
     Additional Route: `<login>`
 
     Request: 
-    ```
+    ```json
     {
       "email": "johndoe@example.com",
       "password": "password123"
     }
     ```
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "id_company": "0c6bba3f-3f92-4c6d-bec1-619c2dfd37a9",
@@ -82,7 +82,7 @@ Journey RestAPI
   * **[POST]** Add New User 
 
     Request: 
-    ```
+    ```json
     {
       "full_name": "John Doe",
       "email": "johndoe@example.com",
@@ -97,7 +97,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
         "status": "Success",
         "message": "User added successfully",
@@ -108,7 +108,7 @@ Journey RestAPI
   * **[PUT]** Edit User
   
     Request:
-    ```
+    ```json
     {
       "email": "string",
       "full_name": "string",
@@ -124,7 +124,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
       "message": "Update Successful"
     }
@@ -135,7 +135,7 @@ Journey RestAPI
     
     Response:
 
-    ```
+    ```json
     {
         "status": "Success",
         "message": "User successfully deleted"
@@ -146,7 +146,7 @@ Journey RestAPI
     Additional Route: `<:userId/apply/:vacancyId> `
     
     Response:
-    ```
+    ```json
     {
         "message": "Job application successful"
     }
@@ -164,7 +164,7 @@ Journey RestAPI
     * **Authorization:** Token
 
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
@@ -197,7 +197,7 @@ Journey RestAPI
     * **Authorization:** Token
     
     Response:
-    ```
+    ```json
     {
         "status": "Success",
         "company": {
@@ -219,14 +219,14 @@ Journey RestAPI
     Additional Route: `<login>`
     
     Request: 
-    ```
+    ```json
     {
       "email": "hrd@company.com",
       "password": "Password123"
     }
     ```
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "id_company": "0c6bbaaf-3f92-4c6d-bec1-619c2dfd37a9",
@@ -238,7 +238,7 @@ Journey RestAPI
   * **[POST]** Add New Company 
 
     Request: 
-    ```
+    ```json
     {
       "name": "string",
       "address": "string",
@@ -251,7 +251,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
         "message": "Company added successfully"
     }
@@ -260,7 +260,7 @@ Journey RestAPI
   * **[PUT]** Edit Company
   
     Request:
-    ```
+    ```json
     {
       "name": "string",
       "address": "string",
@@ -275,7 +275,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
         "message": "Update Successful"
     }
@@ -288,16 +288,10 @@ Journey RestAPI
     ### Header : ###
     * **Content-Type:** application/json
     * **Authorization:** Token
-    
-    Request:
-
-    ```
-    (null)
-    ```
 
     Response:
 
-    ```
+    ```json
     {
         "status": "Success",
         "message": "Company deleted successfuly"
@@ -309,7 +303,7 @@ Journey RestAPI
       Additional Route: `<:companyId/vacancies>`
 
     Request: 
-    ```
+    ```json
     {
         "placement_address": "string",
         "description": "string",
@@ -321,7 +315,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
         "message": "Vacancy created successfully"
     }
@@ -332,7 +326,7 @@ Journey RestAPI
     Additional Route: `<:companyId/vacancies>`
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
@@ -383,7 +377,7 @@ Journey RestAPI
     * **Authorization:** Token
     
     Response:
-    ```
+    ```json
     {
         "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
         "placement_address": "Copywriter",
@@ -406,7 +400,7 @@ Journey RestAPI
       Additional Route: `<:companyId/vacancies/:vacancyId>`
 
     Request: 
-    ```
+    ```json
     {
         "placement_address": "string", 
         "description": "string",
@@ -418,7 +412,7 @@ Journey RestAPI
     }
     ```
     Response:
-    ```
+    ```json
     {
         "message": "Vacancy updated successfully"
     }
@@ -433,7 +427,7 @@ Journey RestAPI
     * **Authorization:** Token
 
     Response:
-    ```
+    ```json
     {
         "message": "Vacancy deleted successfully"
     }
@@ -448,7 +442,7 @@ Journey RestAPI
     * **Authorization:** Token
 
     Response:
-    ```
+    ```json
     [
       {
           "id": "43fcf8bd-0d95-4088-813b-cef893d1baad",
@@ -474,7 +468,7 @@ Journey RestAPI
   * **[GET]** Get All vacancy
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
@@ -510,7 +504,7 @@ Journey RestAPI
     * **Authorization:** Token
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "vacancy": {
@@ -536,7 +530,7 @@ Journey RestAPI
     Additional Route: `<popular>`
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
@@ -570,7 +564,7 @@ Journey RestAPI
     Additional Route: `<latest>`
     
     Response:
-    ```
+    ```json
     {
       "status": "Success",
       "page": 1,
