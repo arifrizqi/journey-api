@@ -159,6 +159,10 @@ Journey RestAPI
 
   * **[GET]** Get All Companies
 
+  ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+
     Response:
     ```
     {
@@ -187,6 +191,10 @@ Journey RestAPI
   * **[GET]** Get Specific Company
   
     Additional Route: `<:id>`
+
+    ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Response:
     ```
@@ -276,6 +284,10 @@ Journey RestAPI
   * **[DELETE]** Delete Specific Company
   
     Additional Route: `<:id>`
+
+    ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Request:
 
@@ -322,20 +334,37 @@ Journey RestAPI
     Response:
     ```
     {
-      "totalCount": 1,
-      "currentPage": 1,
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalVacancies": 2,
       "totalPages": 1,
       "vacancies": [
             {
-                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "id": "0be03113-eea8-4481-b4eb-ea4730cf949e",
                 "placement_address": "Copywriter",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
-                "created_at": "2023-06-07T14:08:40.019Z",
-                "updated_at": "2023-06-07T14:08:40.019Z",
+                "created_at": "2023-06-11T01:45:49.503Z",
+                "updated_at": "2023-06-11T01:45:49.503Z",
                 "deadline_time": "2023-07-03T09:14:30.000Z",
+                "job_type": 2,
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
-                "job_type": 2,
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure"
+            },
+            {
+                "id": "6fe9a956-14b6-4236-a88b-c1a3d96b36c0",
+                "placement_address": "Web Developer",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "created_at": "2023-06-07T15:53:03.987Z",
+                "updated_at": "2023-06-07T15:53:03.987Z",
+                "deadline_time": "2023-07-05T09:14:30.000Z",
+                "job_type": 1,
+                "skill_one_name": "SEO",
+                "skill_two_name": "User Experience Design",
                 "disability_name": "Physical Disability",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
                 "company_name": "PT Agile Solutions",
@@ -348,6 +377,10 @@ Journey RestAPI
   * **[GET]** Get Vacancies Each Company
     
     Additional Route: `<:companyId/vacancies/:vacancyId>`
+
+    ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Response:
     ```
@@ -395,6 +428,10 @@ Journey RestAPI
     
       Additional Route: `<:companyId/vacancies/:vacancyId>`
 
+      ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+
     Response:
     ```
     {
@@ -405,6 +442,10 @@ Journey RestAPI
   * **[GET]** List Applicants
     
       Additional Route: `<:companyId/vacancies/:vacancyId/applicants>`
+
+      ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
 
     Response:
     ```
@@ -429,6 +470,7 @@ Journey RestAPI
 ---
 * ### Vacancies ###
   URL Route: `http://127.0.0.1:8000/api/vacancies/`
+
   * **[GET]** Get All vacancy
     
     Response:
@@ -462,6 +504,10 @@ Journey RestAPI
   * **[GET]** Get Specific vacancy
   
     Additional Route: `<:id>`
+
+    ### Header : ###
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Response:
     ```
@@ -492,26 +538,28 @@ Journey RestAPI
     Response:
     ```
     {
-      "currentPage": 1,
-      "totalPages": 1,
-      "totalItems": 1,
-      "results": [
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalVacancies": 26,
+      "totalPages": 3,
+      "vacancies": [
             {
-                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
-                "placement_address": "Copywriter",
+                "id": "87e514c1-c081-4b81-92c2-5cdf5deaab0d",
+                "placement_address": "Project Manager",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
-                "deadline_time": "2023-07-03T09:14:30.000Z",
-                "id_company": "a8db0da9-7bde-4d75-bf76-ae890cc8ac89",
-                "created_at": "2023-06-07T14:08:40.019Z",
-                "updated_at": "2023-06-07T14:08:40.019Z",
-                "disability_name": "Physical Disability",
-                "skill_one_name": "Python",
-                "skill_two_name": "Adobe Photoshop",
-                "job_type": 2,
+                "deadline_time": "2023-07-05T09:14:30.000Z",
+                "job_type": 3,
+                "id_company": "696358c5-77b8-41d6-825d-d48a33916f18",
+                "created_at": "2023-06-07T23:48:31.725Z",
+                "updated_at": "2023-06-07T23:48:31.725Z",
+                "disability_name": "Visual Impairment",
+                "skill_one_name": "Team Leadership",
+                "skill_two_name": "Calendar Management",
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
-                "company_name": "PT Agile Solutions",
-                "sector_name": "Infrastructure",
-                "total_applicants": 0
+                "company_name": "PT ArchiDesign",
+                "sector_name": "Construction",
+                "total_applicants": 10
             }
         ]
     }
@@ -524,25 +572,27 @@ Journey RestAPI
     Response:
     ```
     {
-      "currentPage": 1,
-      "totalPages": 1,
-      "totalItems": 1,
-      "results": [
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalVacancies": 26,
+      "totalPages": 3,
+      "vacancies": [
             {
-                "id": "ab93f22d-47d9-49a1-b10d-6143de15e4e9",
+                "id": "86039143-becf-445d-b532-9a22766736fb",
                 "placement_address": "Copywriter",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
                 "deadline_time": "2023-07-03T09:14:30.000Z",
-                "id_company": "a8db0da9-7bde-4d75-bf76-ae890cc8ac89",
-                "created_at": "2023-06-07T14:08:40.019Z",
-                "updated_at": "2023-06-07T14:08:40.019Z",
+                "job_type": 2,
+                "id_company": "1bf1c3e5-c3f7-403b-8919-091da23a9bf8",
+                "created_at": "2023-06-11T01:52:21.709Z",
+                "updated_at": "2023-06-11T01:52:21.709Z",
                 "disability_name": "Physical Disability",
                 "skill_one_name": "Python",
                 "skill_two_name": "Adobe Photoshop",
-                "job_type": 2,
                 "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
-                "company_name": "PT Agile Solutions",
-                "sector_name": "Infrastructure"
+                "company_name": "PT TechSol Solutions",
+                "sector_name": "Health care"
             }
         ]
     }

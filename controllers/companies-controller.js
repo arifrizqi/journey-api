@@ -301,78 +301,74 @@ const companiesController = {
     },
 
     getAllVacancies: async (req, res) => {
-        const {
-            companyId
-        } = req.params;
-        const {
-            page = 1, limit = 10
-        } = req.query;
+        const { companyId } = req.params;
+        const { page = 1, limit = 10 } = req.query;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-
+      
         try {
-            const countQuery = 'SELECT COUNT(*) as totalCount FROM vacancies WHERE id_company = ?';
-            const vacanciesQuery = `SELECT 
-            vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type,
-            skil_one.name AS skill_one_name,
-            skil_two.name AS skill_two_name,
-            disability.name AS disability_name,
-            companies.logo AS company_logo,
-            companies.name AS company_name,
-            company_sector.name AS sector_name
-        FROM 
-            vacancies
-            INNER JOIN companies ON vacancies.id_company = companies.id
-            INNER JOIN company_sector ON companies.id_sector = company_sector.id
-        INNER JOIN 
-            skils AS skil_one ON vacancies.skill_one = skil_one.id
-        INNER JOIN 
-            skils AS skil_two ON vacancies.skill_two = skil_two.id
-        INNER JOIN 
-            disability ON vacancies.id_disability = disability.id
-        WHERE 
-            vacancies.id_company = ?
-        LIMIT ?, ?`;
-
-            // Menghitung total jumlah lowongan kerja
-            const totalCount = await new Promise((resolve, reject) => {
-                db.query(countQuery, companyId, (err, results) => {
-                    if (err) {
-                        console.error('Failed to get the total number of job vacancies:', err);
-                        reject('Failed to get the total number of job vacancies');
-                    } else {
-                        resolve(results[0].totalCount);
-                    }
-                });
+          const countQuery = 'SELECT COUNT(*) as totalCount FROM vacancies WHERE id_company = ?';
+          const vacanciesByCompanyQuery = `
+            SELECT 
+              vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type,
+              skil_one.name AS skill_one_name,
+              skil_two.name AS skill_two_name,
+              disability.name AS disability_name,
+              companies.logo AS company_logo,
+              companies.name AS company_name,
+              company_sector.name AS sector_name
+            FROM 
+              vacancies
+              INNER JOIN companies ON vacancies.id_company = companies.id
+              INNER JOIN company_sector ON companies.id_sector = company_sector.id
+              INNER JOIN skils AS skil_one ON vacancies.skill_one = skil_one.id
+              INNER JOIN skils AS skil_two ON vacancies.skill_two = skil_two.id
+              INNER JOIN disability ON vacancies.id_disability = disability.id
+            WHERE 
+              vacancies.id_company = ?
+            LIMIT ?, ?
+          `;
+      
+          const totalCount = await new Promise((resolve, reject) => {
+            db.query(countQuery, companyId, (err, results) => {
+              if (err) {
+                console.error('Failed to get the total number of job vacancies:', err);
+                reject('Failed to get the total number of job vacancies');
+              } else {
+                resolve(results[0].totalCount);
+              }
             });
-
-            // Mendapatkan lowongan kerja sesuai dengan pagination
-            const vacancies = await new Promise((resolve, reject) => {
-                db.query(vacanciesQuery, [companyId, startIndex, limit], (err, results) => {
-                    if (err) {
-                        console.error('Failed to get a job:', err);
-                        reject('Failed to get a job');
-                    } else {
-                        resolve(results);
-                    }
-                });
+          });
+      
+          const vacancies = await new Promise((resolve, reject) => {
+            db.query(vacanciesByCompanyQuery, [companyId, startIndex, limit], (err, results) => {
+              if (err) {
+                console.error('Failed to get job vacancies:', err);
+                reject('Failed to get job vacancies');
+              } else {
+                resolve(results);
+              }
             });
-
-            const response = {
-                totalCount,
-                currentPage: page,
-                totalPages: Math.ceil(totalCount / limit),
-                vacancies,
-            };
-
-            res.status(200).json(response);
+          });
+      
+          const response = {
+            status: 'Success',
+            page: parseInt(page),
+            limit: parseInt(limit),
+            totalVacancies: totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+            vacancies,
+          };
+      
+          res.status(200).json(response);
         } catch (error) {
-            console.error('Terjadi kesalahan:', error);
-            res.status(500).json({
-                error
-            });
+          console.error('An error occurred:', error);
+          res.status(500).json({
+            error
+          });
         }
-    },
+      },
+      
 
     getVacancyById: async (req, res) => {
         const {
