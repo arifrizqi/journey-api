@@ -41,8 +41,6 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
-    Additional Route: `</name/:position>`
-
     Response:
     ```json
     {
