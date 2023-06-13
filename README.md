@@ -4,7 +4,7 @@ Journey RestAPI
 * ### Users ###
   URL Route: `http://127.0.0.1:8000/api/users/`
 
-  * **[GET]** Get All Users
+* **[GET]** Get All Users
 
   Header :
     * **Content-Type:** application/json
@@ -37,7 +37,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Specific Users
+* **[GET]** Get Specific Users
   
     Additional Route: `<:id>`
 
@@ -62,7 +62,7 @@ Journey RestAPI
     }
     ```
 
-  * **[POST]** User Login
+* **[POST]** User Login
 
     Additional Route: `<login>`
 
@@ -83,7 +83,7 @@ Journey RestAPI
     }
     ```
 
-  * **[POST]** Add New User 
+* **[POST]** Add New User 
 
     Request: 
     ```json
@@ -109,7 +109,7 @@ Journey RestAPI
     }
     ```
 
-  * **[PUT]** Edit User
+* **[PUT]** Edit User
   
     Request:
     ```json
@@ -133,7 +133,7 @@ Journey RestAPI
       "message": "Update Successful"
     }
     ```
-  * **[DELETE]** Delete Specific User
+* **[DELETE]** Delete Specific User
   
     Additional Route: `<:id>`
     
@@ -145,7 +145,7 @@ Journey RestAPI
         "message": "User successfully deleted"
     }
     ```
-  * **[POST]** Apply Jobs
+* **[POST]** Apply Jobs
 
     Additional Route: `<:userId/apply/:vacancyId> `
 
@@ -160,7 +160,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** GET Status Jobs Apply
+* **[GET]** Get Status Jobs Apply
 
     Additional Route: `<:userId> `
 
@@ -220,7 +220,7 @@ Journey RestAPI
 * ### Companies ###
   URL Route: `http://127.0.0.1:8000/api/companies/`
 
-  * **[GET]** Get All Companies
+* **[GET]** Get All Companies
 
   Header :
     * **Content-Type:** application/json
@@ -251,7 +251,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Specific Company
+* **[GET]** Get Specific Company
   
     Additional Route: `<:id>`
 
@@ -277,7 +277,7 @@ Journey RestAPI
         }
       }
     ```
-  * **[POST]** Company Login
+* **[POST]** Company Login
 
     Additional Route: `<login>`
     
@@ -298,7 +298,7 @@ Journey RestAPI
     }
     ```
 
-  * **[POST]** Add New Company 
+* **[POST]** Add New Company 
 
     Request: 
     ```json
@@ -320,7 +320,7 @@ Journey RestAPI
     }
     ```
 
-  * **[PUT]** Edit Company
+* **[PUT]** Update Company
   
     Request:
     ```json
@@ -344,7 +344,7 @@ Journey RestAPI
     }
     ```
 
-  * **[DELETE]** Delete Specific Company
+* **[DELETE]** Delete Specific Company
   
     Additional Route: `<:id>`
 
@@ -361,7 +361,7 @@ Journey RestAPI
     }
     ```
 
-  * **[POST]** Add vacancy
+ * **[POST]** Add vacancy
     
       Additional Route: `<:companyId/vacancies>`
 
@@ -384,7 +384,7 @@ Journey RestAPI
     }
     ```
   
-  * **[GET]** Get All Vacancies in Company
+* **[GET]** Get All Vacancies in Company
     
     Additional Route: `<:companyId/vacancies>`
     
@@ -431,7 +431,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Vacancies Each Company
+* **[GET]** Get Vacancies Each Company
     
     Additional Route: `<:companyId/vacancies/:vacancyId>`
 
@@ -458,9 +458,9 @@ Journey RestAPI
     }
     ```
 
-  * **[PUT]** Update vacancy
+* **[PUT]** Update vacancy
     
-      Additional Route: `<:companyId/vacancies/:vacancyId>`
+    Additional Route: `<:companyId/vacancies/:vacancyId>`
 
     Request: 
     ```json
@@ -481,11 +481,11 @@ Journey RestAPI
     }
     ```
 
-  * **[DELETE]** Delete vacancy
+* **[DELETE]** Delete vacancy
     
-      Additional Route: `<:companyId/vacancies/:vacancyId>`
+    Additional Route: `<:companyId/vacancies/:vacancyId>`
 
-      Header :
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -496,11 +496,11 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** List Applicants
+* **[GET]** List Applicants
     
-      Additional Route: `<:companyId/vacancies/:vacancyId/applicants>`
+    Additional Route: `<:companyId/vacancies/:vacancyId/applicants>`
 
-      Header :
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -524,11 +524,11 @@ Journey RestAPI
     ]
     ```
 
-    * **[PUT]** Accept Applicants
+* **[PUT]** Accept Applicants
     
-      Additional Route: `<:companyId/vacancies/:vacancyId/applicants/:applicantsId/accept>`
+    Additional Route: `<:companyId/vacancies/:vacancyId/applicants/:applicantsId/accept>`
 
-      Header :
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -560,7 +560,7 @@ Journey RestAPI
 * ### Vacancies ###
   URL Route: `http://127.0.0.1:8000/api/vacancies/`
 
-  * **[GET]** Get All vacancy
+* **[GET]** Get All vacancy
     
     Response:
     ```json
@@ -590,7 +590,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Specific vacancy
+* **[GET]** Get Specific vacancy
   
     Additional Route: `<:id>`
 
@@ -620,7 +620,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Popular Vacancy
+* **[GET]** Get Popular Vacancy
   
     Additional Route: `<popular>`
     
@@ -654,7 +654,7 @@ Journey RestAPI
     }
     ```
 
-  * **[GET]** Get Latest Vacancy
+* **[GET]** Get Latest Vacancy
   
     Additional Route: `<latest>`
     
