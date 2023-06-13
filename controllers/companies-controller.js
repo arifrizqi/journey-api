@@ -20,7 +20,7 @@ function query(sql, values) {
 
 const companiesController = {
     addCompany: async (req, res) => {
-        const id = uuidv4();
+        const id = uuidv4().substring(0, 8);
         const name = req.body.name;
         const address = req.body.address;
         const city = req.body.city;
@@ -276,7 +276,7 @@ const companiesController = {
         } = req.body;
 
         const vacancy = {
-            id: uuidv4(),
+            id: uuidv4().substring(0, 8),
             placement_address,
             description,
             id_disability,
@@ -512,33 +512,73 @@ const companiesController = {
         );
     },
 
-    applicants: async (req, res) => {
-        const {
-            companyId,
-            vacancyId
-        } = req.params;
+    // applicants: async (req, res) => {
+    //     const {
+    //         companyId,
+    //         vacancyId
+    //     } = req.params;
 
+    //     db.query(
+    //         `SELECT users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, job_apply.created_at AS applied_at, disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
+    //       FROM users 
+    //       INNER JOIN job_apply ON users.id = job_apply.id_user 
+    //       LEFT JOIN disability ON users.id_disability = disability.id
+    //       LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
+    //       LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
+    //       WHERE job_apply.id_vacancy = ?`,
+    //         vacancyId,
+    //         (err, results) => {
+    //             if (err) {
+    //                 console.error('Failed to get a list of applicants:', err);
+    //                 res.status(500).json({
+    //                     error: 'Failed to get a list of applicants'
+    //                 });
+    //             } else {
+    //                 res.status(200).json(results);
+    //             }
+    //         }
+    //     );
+    // },
+
+    applicants: async (req, res) => {
+        const { companyId, vacancyId } = req.params;
+      
         db.query(
-            `SELECT users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, job_apply.created_at AS applied_at, disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
+          `SELECT 
+            users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
+            job_apply.created_at AS applied_at, job_apply.status, 
+            disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name
           FROM users 
           INNER JOIN job_apply ON users.id = job_apply.id_user 
           LEFT JOIN disability ON users.id_disability = disability.id
           LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
           LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
           WHERE job_apply.id_vacancy = ?`,
-            vacancyId,
-            (err, results) => {
-                if (err) {
-                    console.error('Failed to get a list of applicants:', err);
-                    res.status(500).json({
-                        error: 'Failed to get a list of applicants'
-                    });
-                } else {
-                    res.status(200).json(results);
+          vacancyId,
+          (err, results) => {
+            if (err) {
+              console.error('Failed to get a list of applicants:', err);
+              res.status(500).json({ error: 'Failed to get a list of applicants' });
+            } else {
+              // Map the results and add a 'status_name' field based on the 'status' value
+              const applicants = results.map((applicant) => {
+                let statusName = 'Pending';
+      
+                if (applicant.status === 'accepted') {
+                  statusName = 'Accepted';
+                } else if (applicant.status === 'rejected') {
+                  statusName = 'Rejected';
                 }
+      
+                return { ...applicant, status: statusName };
+              });
+      
+              res.status(200).json(applicants);
             }
+          }
         );
-    },
+      },
+      
 
     login: async (req, res) => {
         const { email, password } = req.body;
@@ -619,7 +659,47 @@ const companiesController = {
                 next();
             }
         });
-    }
+    },
+
+    acceptApplicant: async (req, res) => {
+        const { companyId, vacancyId, userId } = req.params;
+    
+        // Update status pelamar menjadi diterima
+        const updateStatusQuery = `
+          UPDATE job_apply 
+          SET status = 'accepted' 
+          WHERE id_company = ? AND id_vacancy = ? AND id_user = ?
+        `;
+        const updateStatusValues = [companyId, vacancyId, userId];
+    
+        try {
+          await query(updateStatusQuery, updateStatusValues);
+          res.status(200).json({ status: 'Success', message: 'Applicant accepted' });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ status: 'Error', message: 'Failed to accept applicant' });
+        }
+      },
+    
+      rejectApplicant: async (req, res) => {
+        const { companyId, vacancyId, userId } = req.params;
+    
+        // Update status pelamar menjadi ditolak
+        const updateStatusQuery = `
+          UPDATE job_apply 
+          SET status = 'rejected' 
+          WHERE id_company = ? AND id_vacancy = ? AND id_user = ?
+        `;
+        const updateStatusValues = [companyId, vacancyId, userId];
+    
+        try {
+          await query(updateStatusQuery, updateStatusValues);
+          res.status(200).json({ status: 'Success', message: 'Applicant rejected' });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ status: 'Error', message: 'Failed to reject applicant' });
+        }
+      }
 
 
 };

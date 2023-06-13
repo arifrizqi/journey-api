@@ -18,6 +18,8 @@ router.post('/:companyId/vacancies', multer.single('logo'), imgUpload.uploadToGc
 
 router.put('/:id', multer.single('logo'), imgUpload.uploadToGcs, companiesController.updateCompany);
 router.put('/:companyId/vacancies/:vacancyId', multer.single('logo'), imgUpload.uploadToGcs, companiesController.updateVacancyByCompany);
+router.put('/:companyId/vacancies/:vacancyId/applicants/:userId/accept', companiesController.authorize, companiesController.acceptApplicant);
+router.put('/:companyId/vacancies/:vacancyId/applicants/:userId/reject', companiesController.authorize, companiesController.rejectApplicant);
 
 router.delete('/:id', companiesController.authorize, companiesController.deleteCompany);
 router.delete('/:companyId/vacancies/:vacancyId', companiesController.authorize, companiesController.deleteVacancyByCompany);

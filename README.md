@@ -5,6 +5,10 @@ Journey RestAPI
   URL Route: `http://127.0.0.1:8000/api/users/`
 
   * **[GET]** Get All Users
+
+  Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Response:
     ```json
@@ -144,11 +148,70 @@ Journey RestAPI
   * **[POST]** Apply Jobs
 
     Additional Route: `<:userId/apply/:vacancyId> `
+
+    Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
     
     Response:
     ```json
     {
         "message": "Job application successful"
+    }
+    ```
+
+  * **[GET]** GET Status Jobs Apply
+
+    Additional Route: `<:userId> `
+
+    Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+    
+    Response:
+    ```json
+    {
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalJobApply": 1,
+      "totalPages": 1,
+      "data": [
+          {
+              "id": "ef04a1da",
+              "full_name": "Arif Rizqi",
+              "email": "arif@gmail.com",
+              "address": "Serang",
+              "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
+              "gender": "male",
+              "age": "20",
+              "phone_number": "028594632394",
+              "applied_at": "2023-06-13T04:05:51.660Z",
+              "status": "Pending",
+              "disability_name": "Mobility Impairment",
+              "skill_one_name": "SEO",
+              "skill_two_name": "Python",
+              "company_name": "PT Artistic Creations",
+              "vacancy_placement_address": "Project Coordinator"
+          },
+          {
+              "id": "ef04a1da",
+              "full_name": "Arif Rizqi",
+              "email": "arif@gmail.com",
+              "address": "Serang",
+              "profile_photo_url": "https://storage.googleapis.com/journey-bangkit/profile.png",
+              "gender": "male",
+              "age": "20",
+              "phone_number": "028594632394",
+              "applied_at": "2023-06-13T03:47:45.722Z",
+              "status": "Accepted",
+              "disability_name": "Mobility Impairment",
+              "skill_one_name": "SEO",
+              "skill_two_name": "Python",
+              "company_name": "PT. Content Masters",
+              "vacancy_placement_address": "UI/UX Designer"
+          }
+      ]
     }
     ```
 
@@ -159,7 +222,7 @@ Journey RestAPI
 
   * **[GET]** Get All Companies
 
-  ### Header : ###
+  Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -192,7 +255,7 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
-    ### Header : ###
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
     
@@ -244,10 +307,10 @@ Journey RestAPI
       "address": "string",
       "city": "string",
       "province": "string",
-      "employees": int,
+      "employees": 1,
       "email": "string",
       "password": "string",
-      "id_sector": int
+      "id_sector": 1
     }
     ```
     Response:
@@ -268,8 +331,8 @@ Journey RestAPI
       "province": "string",
       "logo": "file",
       "desc": "string",
-      "employees": int,
-      "id_sector": int,
+      "employees": 1,
+      "id_sector": 1,
       "email": "string",
       "password": "string"
     }
@@ -285,7 +348,7 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
-    ### Header : ###
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -307,10 +370,10 @@ Journey RestAPI
     {
         "placement_address": "string",
         "description": "string",
-        "id_disability": int,
+        "id_disability": 1,
         "skill_one": "string",
         "skill_two": "string",
-        "job_type": int,
+        "job_type": 1,
         "deadline_time": "date"
     }
     ```
@@ -372,7 +435,7 @@ Journey RestAPI
     
     Additional Route: `<:companyId/vacancies/:vacancyId>`
 
-    ### Header : ###
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
     
@@ -406,7 +469,7 @@ Journey RestAPI
         "description": "string",
         "skill_one": "string",
         "skill_two": "string",
-        "id_disability": int,
+        "id_disability": 2,
         "job_type": 2,
         "deadline_time": "date"
     }
@@ -422,7 +485,7 @@ Journey RestAPI
     
       Additional Route: `<:companyId/vacancies/:vacancyId>`
 
-      ### Header : ###
+      Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -437,7 +500,7 @@ Journey RestAPI
     
       Additional Route: `<:companyId/vacancies/:vacancyId/applicants>`
 
-      ### Header : ###
+      Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
 
@@ -459,6 +522,38 @@ Journey RestAPI
           "skill_two_name": "Python"
       }
     ]
+    ```
+
+    * **[PUT]** Accept Applicants
+    
+      Additional Route: `<:companyId/vacancies/:vacancyId/applicants/:applicantsId/accept>`
+
+      Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+
+    Response:
+    ```json
+    {
+      "status": "Success",
+      "message": "Applicant accepted"
+    }
+    ```
+
+    * **[PUT]** Reject Applicants
+    
+      Additional Route: `<:companyId/vacancies/:vacancyId/applicants/:applicantsId/reject>`
+
+      Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+
+    Response:
+    ```json
+    {
+      "status": "Success",
+      "message": "Applicant rejected"
+    }
     ```
 
 ---
@@ -499,7 +594,7 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
-    ### Header : ###
+    Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
     
