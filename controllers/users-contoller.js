@@ -271,33 +271,33 @@ const usersController = {
         const userId = req.params.userId;
         const vacancyId = req.params.vacancyId;
         const id = uuidv4().substring(0, 8);
-      
+
         // Retrieve the id_company from the vacancies table
         const getCompanyIdQuery = 'SELECT id_company FROM vacancies WHERE id = ?';
         const getCompanyIdValues = [vacancyId];
-      
+
         try {
-          const companyIdResult = await query(getCompanyIdQuery, getCompanyIdValues);
-      
-          if (companyIdResult.length === 0) {
-            res.status(404).json({ error: 'Vacancy not found' });
-            return;
-          }
-      
-          const companyId = companyIdResult[0].id_company;
-      
-          // Insert the job application with the correct id_company
-          const applyJobQuery = 'INSERT INTO job_apply (id, id_vacancy, id_user, id_company, status) VALUES (?, ?, ?, ?, "pending")';
-          const values = [id, vacancyId, userId, companyId];
-      
-          await query(applyJobQuery, values);
-      
-          res.json({ message: 'Job application successful' });
+            const companyIdResult = await query(getCompanyIdQuery, getCompanyIdValues);
+
+            if (companyIdResult.length === 0) {
+                res.status(404).json({ error: 'Vacancy not found' });
+                return;
+            }
+
+            const companyId = companyIdResult[0].id_company;
+
+            // Insert the job application with the correct id_company
+            const applyJobQuery = 'INSERT INTO job_apply (id, id_vacancy, id_user, id_company, status) VALUES (?, ?, ?, ?, "pending")';
+            const values = [id, vacancyId, userId, companyId];
+
+            await query(applyJobQuery, values);
+
+            res.json({ message: 'Job application successful' });
         } catch (error) {
-          console.error('Error applying for a job:', error);
-          res.status(500).json({ error: 'An error occurred while applying for a job' });
+            console.error('Error applying for a job:', error);
+            res.status(500).json({ error: 'An error occurred while applying for a job' });
         }
-      },      
+    },
 
     login: async (req, res) => {
         const { email, password } = req.body;
@@ -380,100 +380,19 @@ const usersController = {
         });
     },
 
-    // applicants: async (req, res) => {
-    //     try {
-    //       const id = req.params.id; // Mendapatkan nilai id dari parameter
-      
-    //       const sql = `
-    //         SELECT 
-    //           users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
-    //           job_apply.created_at AS applied_at, job_apply.status, 
-    //           disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name,
-    //           companies.name AS company_name, vacancies.placement_address AS vacancy_placement_address
-    //         FROM users 
-    //         INNER JOIN job_apply ON users.id = job_apply.id_user 
-    //         INNER JOIN vacancies ON job_apply.id_vacancy = vacancies.id
-    //         INNER JOIN companies ON vacancies.id_company = companies.id
-    //         LEFT JOIN disability ON users.id_disability = disability.id
-    //         LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
-    //         LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
-    //         WHERE users.id = ?
-    //       `;
-      
-    //       const result = await query(sql, [id]); // Menjalankan query dengan menyertakan nilai id sebagai parameter
-    //       const applicants = result.map((applicant) => {
-    //         let statusName = 'Pending';
-      
-    //         if (applicant.status === 'accepted') {
-    //           statusName = 'Accepted';
-    //         } else if (applicant.status === 'rejected') {
-    //           statusName = 'Rejected';
-    //         }
-      
-    //         return { ...applicant, status: statusName };
-    //       });
-      
-    //       res.json({ status: 'Success', applicants });
-    //     } catch (error) {
-    //       console.error('Failed to get a list of applicants:', error);
-    //       res.status(500).json({ error: 'Failed to get a list of applicants' });
-    //     }
-    //   },      
-
-    // applicants: async (req, res) => {
-    //     try {
-    //       const id = req.params.id; // Mendapatkan nilai id dari parameter
-      
-    //       const sql = `
-    //         SELECT 
-    //           users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
-    //           job_apply.created_at AS applied_at, job_apply.status, 
-    //           disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name,
-    //           companies.name AS company_name, vacancies.placement_address AS vacancy_placement_address
-    //         FROM users 
-    //         INNER JOIN job_apply ON users.id = job_apply.id_user 
-    //         INNER JOIN vacancies ON job_apply.id_vacancy = vacancies.id
-    //         INNER JOIN companies ON vacancies.id_company = companies.id
-    //         LEFT JOIN disability ON users.id_disability = disability.id
-    //         LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
-    //         LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
-    //         WHERE users.id = ?
-    //         ORDER BY job_apply.created_at DESC
-    //       `;
-      
-    //       const result = await query(sql, [id]); // Menjalankan query dengan menyertakan nilai id sebagai parameter
-    //       const applicants = result.map((applicant) => {
-    //         let statusName = 'Pending';
-      
-    //         if (applicant.status === 'accepted') {
-    //           statusName = 'Accepted';
-    //         } else if (applicant.status === 'rejected') {
-    //           statusName = 'Rejected';
-    //         }
-      
-    //         return { ...applicant, status: statusName };
-    //       });
-      
-    //       res.json({ status: 'Success', applicants });
-    //     } catch (error) {
-    //       console.error('Failed to get a list of applicants:', error);
-    //       res.status(500).json({ error: 'Failed to get a list of applicants' });
-    //     }
-    //   },
-      
     applicants: async (req, res) => {
         try {
-          const {
-            page = 1,
-            limit = 10
-          } = req.query;
-          const startIndex = (page - 1) * limit;
-      
-          const countSql = 'SELECT COUNT(*) as total FROM users';
-          const countResult = await query(countSql);
-          const totalJobApply = countResult[0].total;
-      
-          const sql = `
+            const {
+                page = 1,
+                limit = 10
+            } = req.query;
+            const startIndex = (page - 1) * limit;
+
+            const countSql = 'SELECT COUNT(*) as total FROM users';
+            const countResult = await query(countSql);
+            const totalJobApply = countResult[0].total;
+
+            const sql = `
             SELECT 
               users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
               job_apply.created_at AS applied_at, job_apply.status, 
@@ -489,38 +408,38 @@ const usersController = {
             ORDER BY job_apply.created_at DESC
             LIMIT ?, ?
           `;
-      
-          const values = [startIndex, parseInt(limit)];
-      
-          const result = await query(sql, values);
-      
-          const data = result.map((applicant) => {
-            let statusName = 'Pending';
-      
-            if (applicant.status === 'accepted') {
-              statusName = 'Accepted';
-            } else if (applicant.status === 'rejected') {
-              statusName = 'Rejected';
-            }
-      
-            return { ...applicant, status: statusName };
-          });
-      
-          const totalPages = Math.ceil(totalJobApply / limit);
-      
-          res.json({
-            status: 'Success',
-            page: parseInt(page),
-            limit: parseInt(limit),
-            totalJobApply,
-            totalPages,
-            data
-          });
+
+            const values = [startIndex, parseInt(limit)];
+
+            const result = await query(sql, values);
+
+            const data = result.map((applicant) => {
+                let statusName = 'Pending';
+
+                if (applicant.status === 'accepted') {
+                    statusName = 'Accepted';
+                } else if (applicant.status === 'rejected') {
+                    statusName = 'Rejected';
+                }
+
+                return { ...applicant, status: statusName };
+            });
+
+            const totalPages = Math.ceil(totalJobApply / limit);
+
+            res.json({
+                status: 'Success',
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalJobApply,
+                totalPages,
+                data
+            });
         } catch (error) {
-          console.error('Failed to get a list of applicants:', error);
-          res.status(500).json({ error: 'Failed to get a list of applicants' });
+            console.error('Failed to get a list of applicants:', error);
+            res.status(500).json({ error: 'Failed to get a list of applicants' });
         }
-      },      
+    },
 
 }
 

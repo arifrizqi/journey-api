@@ -41,6 +41,8 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
+    Additional Route: `</name/:position>`
+
     Response:
     ```json
     {
@@ -147,7 +149,7 @@ Journey RestAPI
     ```
   * **[POST]** Apply Jobs
 
-    Additional Route: `<:userId/apply/:vacancyId> `
+    Additional Route: `<:userId/vacancies/:vacancyId/apply> `
 
     Header :
     * **Content-Type:** application/json
@@ -593,6 +595,8 @@ Journey RestAPI
   * **[GET]** Get Specific vacancy
   
     Additional Route: `<:id>`
+
+    Additional Route: `</name/:position>`
 
     Header :
     * **Content-Type:** application/json

@@ -7,5 +7,6 @@ router.get('/', vacanciesController.getAllVacancies);
 router.get('/popular', vacanciesController.popular);
 router.get('/latest', vacanciesController.latest);
 router.get('/:id', vacanciesController.getVacancyById);
+router.get('/name/:position', vacanciesController.getVacanciesByName);
 
 module.exports = router;
