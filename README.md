@@ -594,8 +594,6 @@ Journey RestAPI
   
     Additional Route: `<:id>`
 
-    Additional Route: `</name/:position>`
-
     Header :
     * **Content-Type:** application/json
     * **Authorization:** Token
@@ -685,6 +683,41 @@ Journey RestAPI
                 "company_name": "PT TechSol Solutions",
                 "sector_name": "Health care"
             }
+        ]
+    }
+    ```
+* **[GET]** Search vacancy 
+
+    Additional Route: `</name/:position>`
+
+    Header :
+    * **Content-Type:** application/json
+    * **Authorization:** Token
+
+    Response:
+    ```json
+    {
+      "status": "Success",
+      "page": 1,
+      "limit": 10,
+      "totalVacancies": 5,
+      "totalPages": 1,
+      "vacancies": [
+            {
+                "id": "18719232-e42c-4936-b69a-606936569f00",
+                "placement_address": "Copywriter",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla.",
+                "created_at": "2023-06-11T02:28:24.334Z",
+                "updated_at": "2023-06-11T02:28:24.334Z",
+                "deadline_time": "2023-07-03T09:14:30.000Z",
+                "job_type": 2,
+                "skill_one_name": "Python",
+                "skill_two_name": "Adobe Photoshop",
+                "disability_name": "Physical Disability",
+                "company_logo": "https://storage.googleapis.com/journey-bangkit/company.png",
+                "company_name": "PT Agile Solutions",
+                "sector_name": "Infrastructure"
+            },
         ]
     }
     ```
