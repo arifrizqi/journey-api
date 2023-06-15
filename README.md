@@ -162,7 +162,7 @@ Journey RestAPI
 
 * **[GET]** Get Status Jobs Apply
 
-    Additional Route: `<:userId> `
+    Additional Route: `</applicants/:userId> `
 
     Header :
     * **Content-Type:** application/json
