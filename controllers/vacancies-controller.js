@@ -235,11 +235,11 @@ const vacanciesController = {
             const { position } = req.params;
             const { page = 1, limit = 10 } = req.query;
             const startIndex = (page - 1) * limit;
-    
+
             const countSql = 'SELECT COUNT(*) as total FROM vacancies WHERE placement_address LIKE ?';
             const countResult = await query(countSql, [`%${position}%`]);
             const totalVacancies = countResult[0].total;
-    
+
             const sql = `
                 SELECT 
                     vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type,
@@ -264,9 +264,9 @@ const vacanciesController = {
                 LIMIT ?, ?
             `;
             const values = [`%${position}%`, startIndex, parseInt(limit)];
-    
+
             const result = await query(sql, values);
-    
+
             const vacancies = result.map((vacancy) => {
                 const tempData = {
                     ...vacancy
@@ -274,15 +274,54 @@ const vacanciesController = {
                 tempData.id = vacancy.id;
                 return tempData;
             });
-    
+
             const totalPages = Math.ceil(totalVacancies / limit);
-    
+
             res.json({
                 status: 'Success',
                 page: parseInt(page),
                 limit: parseInt(limit),
                 totalVacancies,
                 totalPages,
+                vacancies
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 'Error',
+                message: 'An error occurred while loading vacancies'
+            });
+        }
+    },
+
+
+    getAllVacancies2: async (req, res) => {
+        try {
+            const sql = `
+            SELECT 
+              vacancies.id, vacancies.placement_address, vacancies.description, vacancies.created_at, vacancies.updated_at, vacancies.deadline_time, vacancies.job_type,
+              skil_one.name AS skill_one_name,
+              skil_two.name AS skill_two_name,
+              disability.name AS disability_name,
+              companies.logo AS company_logo,
+              companies.name AS company_name,
+              company_sector.name AS sector_name
+            FROM 
+              vacancies
+            INNER JOIN companies ON vacancies.id_company = companies.id
+            INNER JOIN company_sector ON companies.id_sector = company_sector.id
+            INNER JOIN 
+              skils AS skil_one ON vacancies.skill_one = skil_one.id
+            INNER JOIN 
+              skils AS skil_two ON vacancies.skill_two = skil_two.id
+            INNER JOIN 
+              disability ON vacancies.id_disability = disability.id`;
+
+            const result = await query(sql);
+            const vacancies = result.map((vacancy) => ({ ...vacancy }));
+
+            res.json({
+                status: 'Success',
                 vacancies
             });
         } catch (error) {

@@ -380,19 +380,75 @@ const usersController = {
         });
     },
 
+    // applicants: async (req, res) => {
+    //     try {
+    //         const {
+    //             page = 1,
+    //             limit = 10
+    //         } = req.query;
+    //         const startIndex = (page - 1) * limit;
+
+    //         const countSql = 'SELECT COUNT(*) as total FROM users';
+    //         const countResult = await query(countSql);
+    //         const totalJobApply = countResult[0].total;
+
+    //         const sql = `
+    //         SELECT 
+    //           users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
+    //           job_apply.created_at AS applied_at, job_apply.status, 
+    //           disability.name AS disability_name, skills_one.name AS skill_one_name, skills_two.name AS skill_two_name,
+    //           companies.name AS company_name, vacancies.placement_address AS vacancy_placement_address
+    //         FROM users 
+    //         INNER JOIN job_apply ON users.id = job_apply.id_user 
+    //         INNER JOIN vacancies ON job_apply.id_vacancy = vacancies.id
+    //         INNER JOIN companies ON vacancies.id_company = companies.id
+    //         LEFT JOIN disability ON users.id_disability = disability.id
+    //         LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
+    //         LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
+    //         ORDER BY job_apply.created_at DESC
+    //         LIMIT ?, ?
+    //       `;
+
+    //         const values = [startIndex, parseInt(limit)];
+
+    //         const result = await query(sql, values);
+
+    //         const data = result.map((applicant) => {
+    //             let statusName = 'Pending';
+
+    //             if (applicant.status === 'accepted') {
+    //                 statusName = 'Accepted';
+    //             } else if (applicant.status === 'rejected') {
+    //                 statusName = 'Rejected';
+    //             }
+
+    //             return { ...applicant, status: statusName };
+    //         });
+
+    //         const totalPages = Math.ceil(totalJobApply / limit);
+
+    //         res.json({
+    //             status: 'Success',
+    //             page: parseInt(page),
+    //             limit: parseInt(limit),
+    //             totalJobApply,
+    //             totalPages,
+    //             data
+    //         });
+    //     } catch (error) {
+    //         console.error('Failed to get a list of applicants:', error);
+    //         res.status(500).json({ error: 'Failed to get a list of applicants' });
+    //     }
+    // },
+
     applicants: async (req, res) => {
         try {
-            const {
-                page = 1,
-                limit = 10
-            } = req.query;
+            const { page = 1, limit = 10 } = req.query;
+            const id_user = req.params.id_user;
             const startIndex = (page - 1) * limit;
 
-            const countSql = 'SELECT COUNT(*) as total FROM users';
-            const countResult = await query(countSql);
-            const totalJobApply = countResult[0].total;
-
-            const sql = `
+            let countSql = 'SELECT COUNT(*) as total FROM users';
+            let sql = `
             SELECT 
               users.id, users.full_name, users.email, users.address, users.profile_photo_url, users.gender, users.age, users.phone_number, 
               job_apply.created_at AS applied_at, job_apply.status, 
@@ -405,11 +461,14 @@ const usersController = {
             LEFT JOIN disability ON users.id_disability = disability.id
             LEFT JOIN skils AS skills_one ON users.skill_one = skills_one.id
             LEFT JOIN skils AS skills_two ON users.skill_two = skills_two.id
-            ORDER BY job_apply.created_at DESC
-            LIMIT ?, ?
+            WHERE job_apply.id_user = ?
           `;
 
-            const values = [startIndex, parseInt(limit)];
+            const countResult = await query(countSql);
+            const totalJobApply = countResult[0].total;
+
+            sql += ' ORDER BY job_apply.created_at DESC LIMIT ?, ?';
+            const values = [id_user, startIndex, parseInt(limit)];
 
             const result = await query(sql, values);
 
@@ -439,7 +498,12 @@ const usersController = {
             console.error('Failed to get a list of applicants:', error);
             res.status(500).json({ error: 'Failed to get a list of applicants' });
         }
-    },
+    }
+
+
+
+
+
 
 }
 

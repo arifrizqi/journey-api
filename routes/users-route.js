@@ -8,7 +8,7 @@ const usersController = require('../controllers/users-contoller');
 router.post('/login', usersController.login);
 
 router.get('/', usersController.authorize, usersController.getAllUsers);
-router.get('/applicants/:id', usersController.authorize, usersController.applicants);
+router.get('/applicants/:id_user', usersController.authorize, usersController.applicants);
 router.get('/:id', usersController.authorize, usersController.getUserById);
 router.post('/', multer.single('profile_photo_url'), imgUpload.uploadToGcs, usersController.addUser);
 router.put('/:id', usersController.authorize, usersController.updateUser);
