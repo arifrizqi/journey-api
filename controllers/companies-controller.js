@@ -612,13 +612,13 @@ const companiesController = {
                     if (existingTokenResult.length > 0) {
                         // Token already exists, update the existing token
                         const updateTokenQuery = `UPDATE company_tokens SET tokens = ? WHERE id_company = ?`;
-                        const updateTokenValues = [`Bearer ${token}`, companie.id];
+                        const updateTokenValues = [token, companie.id];
 
                         await query(updateTokenQuery, updateTokenValues);
                     } else {
                         // Token doesn't exist, create a new token
                         const insertTokenQuery = `INSERT INTO company_tokens (id_company, tokens) VALUES (?, ?)`;
-                        const insertTokenValues = [companie.id, `Bearer ${token}`];
+                        const insertTokenValues = [companie.id, token];
 
                         await query(insertTokenQuery, insertTokenValues);
                     }
@@ -627,7 +627,7 @@ const companiesController = {
                     req.companyId = companie.id;
 
                     // Add user ID to the response
-                    res.json({ status: 'Success', id_company: companie.id, roleId: 2, token: `Bearer ${token}` });
+                    res.json({ status: 'Success', id_company: companie.id, roleId: 2, token });
                 }
 
 

@@ -331,13 +331,13 @@ const usersController = {
                     if (existingTokenResult.length > 0) {
                         // Token already exists, update the existing token
                         const updateTokenQuery = `UPDATE user_tokens SET tokens = ? WHERE id_user = ?`;
-                        const updateTokenValues = [`Bearer ${token}`, user.id];
+                        const updateTokenValues = [token, user.id];
 
                         await query(updateTokenQuery, updateTokenValues);
                     } else {
                         // Token doesn't exist, create a new token
                         const insertTokenQuery = `INSERT INTO user_tokens (id_user, tokens) VALUES (?, ?)`;
-                        const insertTokenValues = [user.id, `Bearer ${token}`];
+                        const insertTokenValues = [user.id, token];
 
                         await query(insertTokenQuery, insertTokenValues);
                     }
@@ -346,7 +346,7 @@ const usersController = {
                     req.userId = user.id;
 
                     // Add user ID to the response
-                    res.json({ status: 'Success', id_user: user.id, roleId: 1, token: `Bearer ${token}` });
+                    res.json({ status: 'Success', id_user: user.id, roleId: 1, token });
                 }
 
 
